@@ -78,4 +78,5 @@ plt.xlabel(selectedColumns.columns[0])
 abline(slope, intercept)
 plt.title(eq + f',   r^2: {r_sq}')
 plt.grid()
+plt.savefig("fig.png") #guarda la imagen para luego poder outputearla
 plt.show()
