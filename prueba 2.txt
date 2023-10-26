@@ -1,4 +1,3 @@
 prueba 2
 
-linea añadida en local
-cambio conflito
+conflicto arreglado
