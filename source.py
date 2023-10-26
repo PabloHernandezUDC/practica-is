@@ -5,6 +5,7 @@
 # matplotlib
 # scikit-learn
 # statsmodels
+# tkinter
 
 # cosas útiles:
 # -> cómo hacer la refresión lineal y mostrarla:
@@ -40,7 +41,7 @@ def abline(slope, intercept):
     axes = plt.gca()
     x_vals = np.array(axes.get_xlim())
     y_vals = intercept + slope * x_vals
-    plt.plot(x_vals, y_vals, '-r') # fmt = '[marker][line][color]'
+    plt.plot(x_vals, y_vals, '-r') # formato = '[marker][line][color]'
 
 data = p.read_csv('modelos/housing.csv')
 #data = p.read_excel('modelos/housing.xlsx')
@@ -78,4 +79,5 @@ plt.xlabel(selectedColumns.columns[0])
 abline(slope, intercept)
 plt.title(eq + f',   r^2: {r_sq}')
 plt.grid()
+#plt.savefig('graph.png') # para guardarlo en un archivo
 plt.show()
