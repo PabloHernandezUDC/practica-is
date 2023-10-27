@@ -18,7 +18,7 @@ def mostrar(data):
     i = 0
     for c in data.columns:
         print(f'Columna número {i}: {c}')
-        label = Label(root,text=f'Columna número {i}: {c}').pack()
+        label = Label(root,text=f'Columna nº {i}: {c}').pack()
         i += 1
     
 def leer():
