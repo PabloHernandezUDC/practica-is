@@ -49,7 +49,7 @@ data = p.read_csv('modelos/housing.csv')
 nOfColumns = len(data.columns)
 i = 0
 for c in data.columns:
-    print(f'Columna número {i}: {c}')
+    print(f'Columna nº {i}: {c}')
     i += 1
 
 column1Index = ask('Selecciona la primera columna: ', nOfColumns)
