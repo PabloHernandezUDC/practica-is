@@ -45,4 +45,5 @@ if __name__ == '__main__':
     tabla = 'california_housing_dataset'
    
     readRows(nombre, col, tabla)
-    #readOrdered(nombre, col, tabla, 'longitude')
+    #readOrdered(nombre, col, tabla, 'longitude')  
+    
