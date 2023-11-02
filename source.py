@@ -8,7 +8,7 @@
 # tkinter
 
 # cosas útiles:
-# -> cómo hacer la refresión lineal y mostrarla:
+# -> cómo hacer la regresión lineal y mostrarla:
 #   -> https://realpython.com/linear-regression-in-python/
 #   -> https://medium.com/analytics-vidhya/simple-linear-regression-with-example-using-numpy-e7b984f0d15e
 # -> documentación de plot(): https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
