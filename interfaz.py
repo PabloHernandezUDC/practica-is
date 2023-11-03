@@ -6,7 +6,7 @@ import pandas as p
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from regresion import *
+from source import *
 # Función para mostrar la imagen al hacer clic en el botón
 
 # Crear una ventana principal
