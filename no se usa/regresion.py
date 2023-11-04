@@ -19,10 +19,10 @@ def regresionF(data,i,j):
 
     model = LinearRegression().fit(x, y)
 
-    intercept = model.intercept_ # término independiente
+    intercept = model.intercept # término independiente
     slope = model.coef_[0]
     eq = f'{round(slope, 2)}x ' + ('+' if intercept > 0 else '-') + f' {round(abs(intercept), 2)}'
-    
+
     r_sq = round(model.score(x, y), 2)
     plt.plot(x, y, '.k')
     plt.ylabel(selectedColumns.columns[1])
@@ -30,4 +30,4 @@ def regresionF(data,i,j):
     abline(slope, intercept)
     plt.title(eq + f',   r^2: {r_sq}')
     plt.grid()
-    plt.savefig("fig.png") #guarda la imagen para luego poder outputearla
+    plt.savefig("fig.png") # guarda la imagen para luego poder outputearla

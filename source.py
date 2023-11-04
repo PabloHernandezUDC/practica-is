@@ -13,10 +13,16 @@
 #   -> https://medium.com/analytics-vidhya/simple-linear-regression-with-example-using-numpy-e7b984f0d15e
 # -> documentación de plot(): https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
 
+import time
 import pandas as p
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from tkinter import *
+from tkinter import PhotoImage
+from tkinter import filedialog
+from PIL import Image, ImageTk
+from leerBD import createDB, readRows, readOrdered
 
 def ask(text, range):
     while True:
@@ -43,41 +49,106 @@ def abline(slope, intercept):
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, '-r') # formato = '[marker][line][color]'
 
-data = p.read_csv('modelos/housing.csv')
-#data = p.read_excel('modelos/housing.xlsx')
+def regression(d, i, j):
+    plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
+    selectedColumns = d.iloc[:, [i, j]]
 
-nOfColumns = len(data.columns)
-i = 0
-for c in data.columns:
-    print(f'Columna nº {i}: {c}')
-    i += 1
+    x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
+    y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
 
-column1Index = ask('Selecciona la primera columna: ', nOfColumns)
-column2Index = ask('Selecciona la segunda columna: ', nOfColumns)
-while column2Index == column1Index:
-    column2Index = ask('Selecciona la segunda columna: ', nOfColumns)
+    model = LinearRegression().fit(x, y)
 
-selectedColumns = data.iloc[:, [column1Index, column2Index]]
+    intercept = model.intercept_ # término independiente
+    slope = model.coef_[0]
+    eq = f'{round(slope, 2)}x ' + ('+' if intercept > 0 else '-') + f' {round(abs(intercept), 2)}'
 
-x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
-y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
+    print(f'la recta de regresión es', eq)
 
-model = LinearRegression().fit(x, y)
+    r_sq = round(model.score(x, y), 2)
+    print(f"r cuadrado: {r_sq}")
 
-intercept = model.intercept_ # término independiente
-slope = model.coef_[0]
-eq = f'{round(slope, 2)}x ' + ('+' if intercept > 0 else '-') + f' {round(abs(intercept), 2)}'
+    plt.plot(x, y, '.k')
+    plt.ylabel(selectedColumns.columns[1])
+    plt.xlabel(selectedColumns.columns[0])
+    abline(slope, intercept)
+    plt.title(eq + f',   r^2: {r_sq}')
+    plt.grid()
+    filename = 'fig.png'
+    plt.savefig(filename) # para guardarlo en un archivo
+    
+    return filename
 
-print(f'la recta de regresión es', eq)
+def extractDataFromFile(route):
+    '''
+    Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión
+    '''
+    validExtensions = ['csv', 'xlsx', 'db']
+    route = str(route)
+    while route[0] == '/': # le quitamos las barras del principio para que no de error la ruta
+        route = route[1:]
+    
+    # dividimos la ruta según el caracter / y cogemos el último elemento
+    # si la ruta es 'aaaaa/bbbb/cccccc/file.txt', obtendríamos file.txt
+    filename = route.split('/')[-1]
+    
+    # lo mismo pero con el caracter ., para saber la extensión
+    extension = filename.split('.')[-1]
+            
+    data = None
+    if extension not in validExtensions:
+        print(f'El archivo {filename} no es válido.')
+    else:
+        if extension == 'csv':
+            data = p.read_csv(route)
+        elif extension == 'xlsx':
+            data = p.read_excel(route)
+        elif extension == 'db':
+            data = readRows(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
+    return data
 
-r_sq = round(model.score(x, y), 2)
-print(f"r cuadrado: {r_sq}")
+def getColumns(data):
+    i, l = 0, []
+    for c in data:
+        l.append(c)
+    return l
 
-plt.plot(x, y, '.k')
-plt.ylabel(selectedColumns.columns[1])
-plt.xlabel(selectedColumns.columns[0])
-abline(slope, intercept)
-plt.title(eq + f',   r^2: {r_sq}')
-plt.grid()
-plt.savefig('graph.png') # para guardarlo en un archivo
-plt.show()
+def createColumns(data):
+    global v1
+    global v2
+    v1 = IntVar()
+    v2 = IntVar()
+    i = 0
+    for col in getColumns(data):
+        Radiobutton(root, variable = v1, value = i, text = col).grid(row = i+3, column = 2)
+        Radiobutton(root, variable = v2, value = i, text = col).grid(row = i+3, column = 3)
+        i += 1
+
+def leer():
+    global data
+    root.filename = filedialog.askopenfile(initialdir="modelos/")
+    data = extractDataFromFile(root.filename.name)
+    createColumns(data)
+
+def makeAndShowGraph():
+    global data
+    num1, num2 = int(v1.get()), int(v2.get())
+    fName = regression(data, num1, num2)
+    imagen = ImageTk.PhotoImage(file = fName)
+    imageLabel = Label(root, image = imagen)
+    imageLabel.grid(row = 20, column = 0, columnspan = 10)
+    imageLabel.image = imagen
+
+if __name__ == '__main__':
+    # CREAR LA VENTANA PRINCIPAL
+    root = Tk()
+    root.title("Regresión lineal")
+    width, height = 800, 900
+    root.geometry(str(width) + 'x' + str(height))
+
+    # CREAR LOS BOTONES
+    chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 0)
+    showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 1)
+    quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 2)
+
+    # EJECUTAR EL BUCLE PRINCIPAL
+    root.mainloop()
