@@ -128,6 +128,7 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
     createColumns(data)
+    filepath.config(text=f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def makeAndShowGraph():
     global data
@@ -149,6 +150,10 @@ if __name__ == '__main__':
     chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 0)
     showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 1)
     quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 2)
+
+    # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
+    filepath = Label(root, text="")
+    filepath.grid()
 
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
