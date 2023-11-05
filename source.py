@@ -147,13 +147,13 @@ if __name__ == '__main__':
     root.geometry(str(width) + 'x' + str(height))
 
     # CREAR LOS BOTONES
-    chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 0)
-    showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 1)
-    quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 2)
+    chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 1)
+    showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 2)
+    quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 3)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = Label(root, text="")
-    filepath.grid()
+    filepath = Label(root, text="", wraplength=width*0.9)
+    filepath.grid(row=0, column=0, columnspan=10)
 
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
