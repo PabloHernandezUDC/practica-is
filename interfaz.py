@@ -26,6 +26,7 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="/modelos")
     data = p.read_csv(root.filename)
     mostrar(data)
+    etiqueta_ruta.config(text=f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def mostrar_imagen():
     global entry1
@@ -52,5 +53,10 @@ entry2= Entry(root, width= 40)
 entry2.focus_set()
 entry2.place(x=330, y =480)
 Button(root, text="Quit", command=root.destroy).pack()
+
+# Crear una etiqueta para mostrar la ruta del archivo
+etiqueta_ruta = Label(root, text="")
+etiqueta_ruta.pack(pady=10)
+
 # Ejecutar el bucle principal
 root.mainloop()
