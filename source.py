@@ -21,6 +21,7 @@ from sklearn.linear_model import LinearRegression
 from tkinter import *
 from tkinter import PhotoImage
 from tkinter import filedialog
+import customtkinter
 from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered
 
@@ -119,8 +120,8 @@ def createColumns(data):
     v2 = IntVar()
     i = 0
     for col in getColumns(data):
-        Radiobutton(root, variable = v1, value = i, text = col).grid(row = i+3, column = 2)
-        Radiobutton(root, variable = v2, value = i, text = col).grid(row = i+3, column = 3)
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = i+10, column = 2)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = i+10, column = 4)
         i += 1
 
 def leer():
@@ -128,31 +129,45 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
     createColumns(data)
-    filepath.config(text=f"Ruta del archivo seleccionado: {root.filename.name}")
+    filepath.configure(text=f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def makeAndShowGraph():
+    top= Toplevel(root)
+    top.geometry("800x600")
+    top.title("Graph Display")
     global data
     num1, num2 = int(v1.get()), int(v2.get())
     fName = regression(data, num1, num2)
-    imagen = ImageTk.PhotoImage(file = fName)
-    imageLabel = Label(root, image = imagen)
-    imageLabel.grid(row = 20, column = 0, columnspan = 10)
+    imagen = customtkinter.CTkImage(light_image=Image.open(fName),size=(640,480))
+    imageLabel = customtkinter.CTkLabel(top, image = imagen)
+    #imageLabel.grid(row = 20, column = 0, columnspan = 10)
+    imageLabel.pack()
     imageLabel.image = imagen
+    top.mainloop()
+    top.attributes('-topmost',True)
+    
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
-    root = Tk()
+    root = customtkinter.CTk()
     root.title("Regresión lineal")
-    width, height = 800, 900
+    root.grid_columnconfigure(0,weight=1)
+    root.grid_columnconfigure(1,weight=1)
+    root.grid_columnconfigure(2,weight=1)
+    root.grid_columnconfigure(3,weight=1)
+    root.grid_columnconfigure(4,weight=1)
+    root.grid_columnconfigure(5,weight=1)
+    root.grid_columnconfigure(6,weight=1)
+    width, height = 800, 600
     root.geometry(str(width) + 'x' + str(height))
 
     # CREAR LOS BOTONES
-    chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 1)
-    showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 2)
-    quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 3)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1,column = 3)
+    showButton = customtkinter.CTkButton(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 2,column = 3)
+    quitButton = customtkinter.CTkButton(root, text = "Quit", command = root.destroy).grid(row = 3,column = 3)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = Label(root, text="", wraplength=width*0.9)
+    filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
     filepath.grid(row=0, column=0, columnspan=10)
 
     # EJECUTAR EL BUCLE PRINCIPAL
