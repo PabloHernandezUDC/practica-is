@@ -185,7 +185,7 @@ if __name__ == '__main__':
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1,column = 3)
     showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2,column = 3)
-    quitButton = customtkinter.CTkButton(root, text = "Quit", command = root.destroy).grid(row = 3,column = 3)
+    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3,column = 3)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
