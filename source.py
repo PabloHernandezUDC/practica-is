@@ -170,6 +170,7 @@ def makeAndShowGraph():
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
+    root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
     root.grid_columnconfigure(0,weight=1)
     root.grid_columnconfigure(1,weight=1)
