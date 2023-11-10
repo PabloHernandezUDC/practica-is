@@ -21,8 +21,11 @@ from sklearn.linear_model import LinearRegression
 from tkinter import *
 from tkinter import PhotoImage
 from tkinter import filedialog
+import customtkinter
 from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered
+import class_model
+from pickle import dump, dumps, load, loads
 
 def ask(text, range):
     while True:
@@ -55,28 +58,32 @@ def regression(d, i, j):
 
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
+    #np.set_printoptions(threshold=np.inf)
+    #print('Esta es el array x',x)
 
     model = LinearRegression().fit(x, y)
 
     intercept = model.intercept_ # término independiente
     slope = model.coef_[0]
     eq = f'{round(slope, 2)}x ' + ('+' if intercept > 0 else '-') + f' {round(abs(intercept), 2)}'
+    
 
     print(f'la recta de regresión es', eq)
 
     r_sq = round(model.score(x, y), 2)
     print(f"r cuadrado: {r_sq}")
 
-    plt.plot(x, y, '.k')
-    plt.ylabel(selectedColumns.columns[1])
-    plt.xlabel(selectedColumns.columns[0])
-    abline(slope, intercept)
-    plt.title(eq + f',   r^2: {r_sq}')
-    plt.grid()
-    filename = 'fig.png'
-    plt.savefig(filename) # para guardarlo en un archivo
-    
-    return filename
+    modelo_obj=class_model.Model(intercept, slope, r_sq, selectedColumns, x, y, root.filename.name)
+    return modelo_obj
+
+def serialize(obj, name_file):
+    with open(str(name_file),"wb") as f:
+        dump(obj, f)
+
+def deserialize(name_file):
+    with open(str(name_file),"rb") as f:
+        unpicked_model=load(f)
+    return unpicked_model
 
 def extractDataFromFile(route):
     '''
@@ -119,8 +126,8 @@ def createColumns(data):
     v2 = IntVar()
     i = 0
     for col in getColumns(data):
-        Radiobutton(root, variable = v1, value = i, text = col).grid(row = i+3, column = 2)
-        Radiobutton(root, variable = v2, value = i, text = col).grid(row = i+3, column = 3)
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = i+10, column = 2)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = i+10, column = 4)
         i += 1
 
 def leer():
@@ -128,31 +135,61 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
     createColumns(data)
-    filepath.config(text=f"Ruta del archivo seleccionado: {root.filename.name}")
+    filepath.configure(text=f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def makeAndShowGraph():
+    top= Toplevel(root)
+    top.geometry("800x600")
+    top.title("Graph Display")
     global data
     num1, num2 = int(v1.get()), int(v2.get())
-    fName = regression(data, num1, num2)
-    imagen = ImageTk.PhotoImage(file = fName)
-    imageLabel = Label(root, image = imagen)
-    imageLabel.grid(row = 20, column = 0, columnspan = 10)
+
+    model=regression(data, num1, num2)
+
+    x,y=model.get_columnx(),model.get_columny()
+    selectedColumns=model.get_selectedColumns()
+    plt.plot(x, y, '.k')
+    plt.ylabel(selectedColumns.columns[1])
+    plt.xlabel(selectedColumns.columns[0])
+    abline(model.get_slope(), model.get_intercept())
+    plt.title(f'r^2: {model.get_rsquare()}')
+    plt.grid()
+    filename = 'fig.png'
+    plt.savefig(filename) # para guardarlo en un archivo
+
+    
+    imagen = customtkinter.CTkImage(light_image=Image.open(filename),size=(640,480))
+    imageLabel = customtkinter.CTkLabel(top, image = imagen)
+    #imageLabel.grid(row = 20, column = 0, columnspan = 10)
+    imageLabel.pack()
     imageLabel.image = imagen
+    top.mainloop()
+    top.attributes('-topmost',True)
+    
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
-    root = Tk()
+    root = customtkinter.CTk()
+    root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
-    width, height = 800, 900
+    root.grid_columnconfigure(0,weight=1)
+    root.grid_columnconfigure(1,weight=1)
+    root.grid_columnconfigure(2,weight=1)
+    root.grid_columnconfigure(3,weight=1)
+    root.grid_columnconfigure(4,weight=1)
+    root.grid_columnconfigure(5,weight=1)
+    root.grid_columnconfigure(6,weight=1)
+    width, height = 800, 600
     root.geometry(str(width) + 'x' + str(height))
 
+
     # CREAR LOS BOTONES
-    chooseButton = Button(root, text = "Elegir archivo", command = leer).grid(row = 1)
-    showButton = Button(root, text = "Mostrar Imagen", command = makeAndShowGraph).grid(row = 2)
-    quitButton = Button(root, text = "Quit", command = root.destroy).grid(row = 3)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1,column = 3)
+    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2,column = 3)
+    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3,column = 3)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = Label(root, text="", wraplength=width*0.9)
+    filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
     filepath.grid(row=0, column=0, columnspan=10)
 
     # EJECUTAR EL BUCLE PRINCIPAL
