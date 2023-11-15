@@ -1,4 +1,13 @@
 import sqlite3 as sql
+import pandas as pd
+
+
+
+def leer_sql(nombre):
+
+    cnx = sql.connect(nombre)
+    df = pd.read_sql_query("SELECT * FROM california_housing_dataset", cnx)
+    return df
 
 def createDB(nombre_db):
     conexion = sql.connect(nombre_db)
@@ -69,9 +78,9 @@ def readOrdered(nombre_db, field):
     return datos
 
 if __name__ == '__main__':
-    nombre = 'modelos/housing.db'
+    nombre = "modelos/housing.db"
     col = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value', 'ocean_proximity']
     tabla = 'california_housing_dataset'
    
-    readRows(nombre, col, tabla)
+ 
     #readOrdered(nombre, col, tabla, 'longitude')

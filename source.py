@@ -23,7 +23,7 @@ from tkinter import PhotoImage
 from tkinter import filedialog
 import customtkinter
 from PIL import Image, ImageTk
-from leerBD import createDB, readRows, readOrdered
+from leerBD import createDB, readRows, readOrdered,leer_sql
 import class_model
 from pickle import dump, dumps, load, loads
 
@@ -110,7 +110,8 @@ def extractDataFromFile(route):
         elif extension == 'xlsx':
             data = p.read_excel(route)
         elif extension == 'db':
-            data = readRows(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
+            
+            data = leer_sql(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
     return data
 
 def getColumns(data):
