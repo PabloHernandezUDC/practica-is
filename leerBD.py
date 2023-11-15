@@ -6,12 +6,39 @@ def createDB(nombre_db):
     conexion.commit()
     conexion.close()
 
-def readRows(nombre_db, lista_columnas, nombre_tabla):
+def nombre_tabla(nombre_db):
     conexion = sql.connect(nombre_db)
     cursor = conexion.cursor()
 
-    columnas = ', '.join(lista_columnas)
-    instruccion = "SELECT {} FROM {}".format(columnas, nombre_tabla)
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tabla = cursor.fetchone()[0]
+
+    conexion.close()
+
+    return tabla
+
+def nombre_columnas(nombre_db):
+    tabla = nombre_tabla(nombre_db)
+
+    conexion = sql.connect(nombre_db)
+    cursor = conexion.cursor()
+
+    cursor.execute(f"PRAGMA table_info({tabla});")
+
+    columnas = cursor.fetchall()
+
+    for columna in columnas:
+        print(columna[1])
+
+    conexion.close()
+
+def readRows(nombre_db):
+    conexion = sql.connect(nombre_db)
+    cursor = conexion.cursor()
+
+    tabla = nombre_tabla(nombre_db)
+
+    instruccion = "SELECT * FROM {}".format(tabla)
     cursor.execute(instruccion)
     
     datos = cursor.fetchall() #crea una lista de tuplas con la info de la tabla
@@ -23,12 +50,13 @@ def readRows(nombre_db, lista_columnas, nombre_tabla):
     #    print(fila)
     return datos
 
-def readOrdered(nombre_db, lista_columnas, nombre_tabla,  field):
+def readOrdered(nombre_db, field):
     conexion = sql.connect(nombre_db)
     cursor = conexion.cursor()
 
-    columnas = ', '.join(lista_columnas)
-    instruccion = "SELECT {} FROM {} ORDER BY {}".format(columnas, nombre_tabla, field)
+    tabla = nombre_tabla(nombre_db)
+
+    instruccion = "SELECT * FROM {} ORDER BY {}".format(tabla, field)
     cursor.execute(instruccion)
     
     datos = cursor.fetchall() #crea una lista de tuplas con la info de la tabla
