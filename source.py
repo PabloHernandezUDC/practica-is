@@ -16,12 +16,14 @@
 import time
 import pandas as p
 import numpy as np
+import customtkinter
+import class_model
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
 from tkinter import *
 from tkinter import PhotoImage
 from tkinter import filedialog
-import customtkinter
 from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered,leer_sql
 import class_model
@@ -64,16 +66,12 @@ def regression(d, i, j):
     model = LinearRegression().fit(x, y)
 
     intercept = model.intercept_ # término independiente
-    slope = model.coef_[0]
-    eq = f'{round(slope, 2)}x ' + ('+' if intercept > 0 else '-') + f' {round(abs(intercept), 2)}'
-    
-
-    print(f'la recta de regresión es', eq)
-
+    slope = model.coef_[0] 
     r_sq = round(model.score(x, y), 2)
-    print(f"r cuadrado: {r_sq}")
-
-    modelo_obj=class_model.Model(intercept, slope, r_sq, selectedColumns, x, y, root.filename.name)
+    meanSquaredError = np.mean((model.predict(x) - y)**2)
+    meanSquaredError = round(meanSquaredError, 2)
+    
+    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, y, root.filename.name)
     return modelo_obj
 
 def serialize(obj, name_file):
@@ -82,36 +80,26 @@ def serialize(obj, name_file):
 
 def deserialize(name_file):
     with open(str(name_file),"rb") as f:
-        unpicked_model=load(f)
+        unpicked_model = load(f)
     return unpicked_model
 
 def extractDataFromFile(route):
     '''
     Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión
     '''
-    validExtensions = ['csv', 'xlsx', 'db']
+    validExtensions = ('.csv', '.xlsx', '.db')
     route = str(route)
-    while route[0] == '/': # le quitamos las barras del principio para que no de error la ruta
-        route = route[1:]
-    
-    # dividimos la ruta según el caracter / y cogemos el último elemento
-    # si la ruta es 'aaaaa/bbbb/cccccc/file.txt', obtendríamos file.txt
-    filename = route.split('/')[-1]
-    
-    # lo mismo pero con el caracter ., para saber la extensión
-    extension = filename.split('.')[-1]
             
-    data = None
-    if extension not in validExtensions:
-        print(f'El archivo {filename} no es válido.')
+    if route.endswith(validExtensions) is False:
+        print(f'El archivo en la ruta {route} no es válido.')
+        data = None
     else:
-        if extension == 'csv':
+        if route.endswith('.csv'):
             data = p.read_csv(route)
-        elif extension == 'xlsx':
+        elif route.endswith('.xlsx'):
             data = p.read_excel(route)
-        elif extension == 'db':
-            
-            data = leer_sql(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
+        elif route.endswith('.db'):
+            data = readRows(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
     return data
 
 def getColumns(data):
@@ -136,7 +124,7 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
     createColumns(data)
-    filepath.configure(text=f"Ruta del archivo seleccionado: {root.filename.name}")
+    filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def makeAndShowGraph():
     top= Toplevel(root)
@@ -145,53 +133,51 @@ def makeAndShowGraph():
     global data
     num1, num2 = int(v1.get()), int(v2.get())
 
-    model=regression(data, num1, num2)
+    model = regression(data, num1, num2)
 
-    x,y=model.get_columnx(),model.get_columny()
-    selectedColumns=model.get_selectedColumns()
+    x, y = model.get_columnx(), model.get_columny()
+    selectedColumns = model.get_selectedColumns()
     plt.plot(x, y, '.k')
     plt.ylabel(selectedColumns.columns[1])
     plt.xlabel(selectedColumns.columns[0])
     abline(model.get_slope(), model.get_intercept())
-    plt.title(f'r^2: {model.get_rsquare()}')
+    eq = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
+    plt.title(f'{eq} / R²: {model.get_rsquare()}')
     plt.grid()
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
-
     
-    imagen = customtkinter.CTkImage(light_image=Image.open(filename),size=(640,480))
+    imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
     imageLabel = customtkinter.CTkLabel(top, image = imagen)
     #imageLabel.grid(row = 20, column = 0, columnspan = 10)
     imageLabel.pack()
     imageLabel.image = imagen
     top.mainloop()
-    top.attributes('-topmost',True)
-    
+    top.attributes('-topmost', True)
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
-    root.grid_columnconfigure(0,weight=1)
-    root.grid_columnconfigure(1,weight=1)
-    root.grid_columnconfigure(2,weight=1)
-    root.grid_columnconfigure(3,weight=1)
-    root.grid_columnconfigure(4,weight=1)
-    root.grid_columnconfigure(5,weight=1)
-    root.grid_columnconfigure(6,weight=1)
+    root.grid_columnconfigure(0, weight = 1)
+    root.grid_columnconfigure(1, weight = 1)
+    root.grid_columnconfigure(2, weight = 1)
+    root.grid_columnconfigure(3, weight = 1)
+    root.grid_columnconfigure(4, weight = 1)
+    root.grid_columnconfigure(5, weight = 1)
+    root.grid_columnconfigure(6, weight = 1)
     width, height = 800, 600
     root.geometry(str(width) + 'x' + str(height))
 
-
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1,column = 3)
-    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2,column = 3)
-    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3,column = 3)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 3)
+    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 3)
+    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 3)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
-    filepath.grid(row=0, column=0, columnspan=10)
+    filepath.grid(row = 0, column = 0, columnspan = 10)
 
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
