@@ -32,10 +32,11 @@ class Model():
     set_filepath(filepath): Establece el valor de la ruta del archivo.
     """
 
-    def __init__(self, intercept, slope, rsquare, columnx, columny, filepath):
+    def __init__(self, intercept, slope, rsquare, selectedColumns, columnx, columny, filepath):
         self.intercept = intercept
         self.slope = slope
         self.rsquare = rsquare
+        self.selectedColumns=selectedColumns
         self.columnx = columnx
         self.columny = columny
         self.filepath = filepath # para este parámetro habría que crear una variable en el código principal que llame a la ruta del archivo,
@@ -58,6 +59,12 @@ class Model():
     
     def set_rsquare(self, rsquare):
         self.rsquare = rsquare
+    
+    def get_selectedColumns(self):
+        return self.selectedColumns
+    
+    def set_selectedColumns(self, selectedColumns):
+        self.selectedColumns = selectedColumns
 
     def get_columnx(self):
         return self.columnx
