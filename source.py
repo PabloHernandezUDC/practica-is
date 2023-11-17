@@ -99,7 +99,7 @@ def extractDataFromFile(route):
         elif route.endswith('.xlsx'):
             data = p.read_excel(route)
         elif route.endswith('.db'):
-            data = readRows(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
+            data = leer_sql(route) # TODO: no funciona con los .db porque no tenemos las columnas y el nombre de la tabla para pasarle como arguemnto
     return data
 
 def getColumns(data):
