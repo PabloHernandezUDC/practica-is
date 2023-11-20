@@ -121,10 +121,12 @@ def createColumns(data):
     v1 = IntVar()
     v2 = IntVar()
     i = 0
+    customtkinter.CTkLabel(root,text="X:").grid(row=4,column=0+i)
+    customtkinter.CTkLabel(root,text="Y:").grid(row=6,column=0+i)
     for col in getColumns(data):
         
-        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 0+i,sticky=W)
-        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 0+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 1+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 1+i,sticky=W)
         i += 1
 
 def leer():
