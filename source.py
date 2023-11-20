@@ -103,9 +103,16 @@ def extractDataFromFile(route):
     return data
 
 def getColumns(data):
-    i, l = 0, []
-    for c in data:
-        l.append(c)
+    l =  []
+    for columna in data.columns:
+        k = data[columna].dtype
+        if k != 'object':
+            l.append(columna)
+        else:
+            pass
+    
+    
+
     return l
 
 def createColumns(data):
@@ -115,8 +122,9 @@ def createColumns(data):
     v2 = IntVar()
     i = 0
     for col in getColumns(data):
-        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = i+10, column = 2)
-        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = i+10, column = 4)
+        
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 0+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 0+i,sticky=W)
         i += 1
 
 def leer():
@@ -157,23 +165,24 @@ def makeAndShowGraph():
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
+    
     root = customtkinter.CTk()
+    #root.attributes('-fullscreen',True)
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
-    root.grid_columnconfigure(0, weight = 1)
-    root.grid_columnconfigure(1, weight = 1)
-    root.grid_columnconfigure(2, weight = 1)
-    root.grid_columnconfigure(3, weight = 1)
-    root.grid_columnconfigure(4, weight = 1)
-    root.grid_columnconfigure(5, weight = 1)
-    root.grid_columnconfigure(6, weight = 1)
-    width, height = 800, 600
+    for i in range(10):
+        root.grid_columnconfigure(i, weight = 1)
+    for i in range(10):
+        root.grid_rowconfigure(i, weight = 1)
+    root.grid_rowconfigure(10, weight = 50)
+    
+    width, height = 1920, 1080
     root.geometry(str(width) + 'x' + str(height))
 
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 3)
-    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 3)
-    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 3)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 4,columnspan=2)
+    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
+    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
