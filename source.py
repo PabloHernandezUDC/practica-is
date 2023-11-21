@@ -6,6 +6,7 @@
 # scikit-learn
 # statsmodels
 # tkinter
+# customtkinter
 
 # cosas útiles:
 # -> cómo hacer la regresión lineal y mostrarla:
@@ -45,14 +46,10 @@ def ask(text, range):
             break
         except ValueError:
             print('Eso no es un número válido.')
-
     return result
 
 
 def abline(slope, intercept):
-    """
-    robado de: https://stackoverflow.com/questions/7941226/how-to-add-line-based-on-slope-and-intercept
-    """
     axes = plt.gca()
     x_vals = np.array(axes.get_xlim())
     y_vals = intercept + slope * x_vals
@@ -66,7 +63,6 @@ def regression(d, i, j):
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
     #np.set_printoptions(threshold=np.inf)
-    #print('Esta es el array x',x)
 
     model = LinearRegression().fit(x, y)
 
@@ -131,17 +127,34 @@ def createColumns(data):
     customtkinter.CTkLabel(root, text = "X:").grid(row = 3, column = 0)
     customtkinter.CTkLabel(root, text = "Y:").grid(row = 5, column = 0)
     for col in getColumns(data):
-        
-        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 3, column = 1+i, sticky = W)
-        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 5, column = 1+i, sticky = W)
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 0+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 0+i,sticky=W)
         i += 1
     customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 7, column = 5)
 
 
 def leer():
-    global data
-    root.filename = filedialog.askopenfile(initialdir = "modelos/")
+    global data, width, height
+    root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
+    
+    # MOSTRAR LOS DATOS EN UNA TABLA
+    dataTable = customtkinter.CTkScrollableFrame(master=root,
+                                                 width=width*0.75,
+                                                 height=height*0.14,
+                                                 corner_radius=10,
+                                                 orientation='horizontal')
+    
+    printableData = data.head() # head coge por defecto las 5 primeras filas
+    
+    for i in range(len(printableData.columns)):        
+        customtkinter.CTkLabel(dataTable,
+                               text = printableData.columns[i] + '\n' + printableData.iloc[:, i].to_string(index=False),
+                               justify='right',
+                               font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
+                               ).grid(row=0, column=i, padx=10, sticky=W)
+    dataTable.grid(row=3, column=0, columnspan=20)
+    
     createColumns(data)
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
 
