@@ -6,6 +6,9 @@
 # scikit-learn
 # statsmodels
 # tkinter
+# customtkinter
+# jinja2
+# tabulate
 
 # cosas útiles:
 # -> cómo hacer la regresión lineal y mostrarla:
@@ -28,6 +31,7 @@ from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered,leer_sql
 import class_model
 from pickle import dump, dumps, load, loads
+from tabulate import tabulate
 
 def ask(text, range):
     while True:
@@ -127,10 +131,64 @@ def createColumns(data):
         customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 0+i,sticky=W)
         i += 1
 
+def formatTable(df):
+    stringTable = str(df)
+    stringTable = stringTable.split('\n')
+    stringTable = [r.strip() for r in stringTable]
+
+    header = stringTable[0]
+    headerColumnSizes = []
+    for word in header.split():
+        headerColumnSizes.append(len(word))
+    
+    stringTable = stringTable[1:]
+    
+    for i in range(len(stringTable)):
+        stringTable[i] = stringTable[i].split(maxsplit=len(headerColumnSizes))
+        stringTable[i] = stringTable[i][1:]
+        for j in range(len(stringTable[i])):
+            while len(stringTable[i][j]) < headerColumnSizes[j]:
+                stringTable[i][j] += ' '
+
+        
+    #for r in stringTable:
+    #    r = r.split(maxsplit=len(headerColumnSizes))
+    #    r = r[1:]
+    #    for i in range(len(r)):
+    #        while len(r[i]) < headerColumnSizes[i]:
+    #            r[i] += ' '
+    #    print(r)
+
+    print('stringTable es')
+    print(header)
+    for r in stringTable:
+        print(*(w for w in r), sep='')
+    
+    return df
+
 def leer():
     global data
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
+    
+    # MOSTRAR LOS DATOS EN UNA TABLA
+    dataTable = customtkinter.CTkScrollableFrame(master=root,
+                                                 width=1840,
+                                                 height=350,
+                                                 corner_radius=10)
+    
+    nOfColumnsToShow = 25
+    printableData = data.head(nOfColumnsToShow)
+
+    printableData = formatTable(printableData)
+    
+    for r in printableData:        
+        customtkinter.CTkLabel(dataTable, text = r, justify='left', font=('comic sans ms', 20)).grid(row=printableData.index(r), column=0)
+    dataTable.grid(row=3, column=0, columnspan=20)
+
+    
+    # MOSTRAR LOS DATOS EN UNA TABLA
+    
     createColumns(data)
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
 
@@ -150,7 +208,7 @@ def makeAndShowGraph():
     plt.xlabel(selectedColumns.columns[0])
     abline(model.get_slope(), model.get_intercept())
     eq = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
-    plt.title(f'{eq} / R²: {model.get_rsquare()}')
+    plt.title(f'{eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     plt.grid()
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
