@@ -30,6 +30,9 @@ import class_model
 from pickle import dump, dumps, load, loads
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
+
+
 def ask(text, range):
     while True:
         try:
@@ -117,17 +120,27 @@ def getColumns(data):
     return l
 
 def createColumns(data):
+    scrollx = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
+    scrolly = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
+    scrollx.grid(row=4,sticky=W)
+    scrolly.grid(row=6,sticky=W)
     global v1
     global v2
     v1 = IntVar()
     v2 = IntVar()
     i = 0
-    customtkinter.CTkLabel(root,text="X:").grid(row=4,column=0+i)
-    customtkinter.CTkLabel(root,text="Y:").grid(row=6,column=0+i)
+    customtkinter.CTkLabel(scrollx,text="X:").grid(row=0,column=0)
+    customtkinter.CTkLabel(scrolly,text="Y:").grid(row=0,column=0)
+    
+    for col in getColumns(data):
+        scrollx.grid_columnconfigure(i,weight=1)
+        scrolly.grid_columnconfigure(i,weight=1)
+        i+=1
+    i = 0
     for col in getColumns(data):
         
-        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 1+i,sticky=W)
-        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 1+i,sticky=W)
+        customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
+        customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
 
 def leer():
@@ -190,14 +203,17 @@ if __name__ == '__main__':
     width, height = 1920, 1080
     root.geometry(str(width) + 'x' + str(height))
 
+
+
+    
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 4,columnspan=2)
-    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 3,columnspan=2)
+    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 3,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
     filepath.grid(row = 0, column = 0, columnspan = 10)
-
+    
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
