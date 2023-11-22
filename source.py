@@ -125,12 +125,12 @@ def createColumns(data):
     v2 = IntVar()
     i = 0
     customtkinter.CTkLabel(root, text = "X:").grid(row = 3, column = 0)
-    customtkinter.CTkLabel(root, text = "Y:").grid(row = 5, column = 0)
+    customtkinter.CTkLabel(root, text = "Y:").grid(row = 4, column = 0)
     for col in getColumns(data):
-        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 4, column = 0+i,sticky=W)
-        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 6, column = 0+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v1, value = i, text = col).grid(row = 3, column = 1+i,sticky=W)
+        customtkinter.CTkRadioButton(root, variable = v2, value = i, text = col).grid(row = 4, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 7, column = 5)
+    customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 5)
 
 
 def leer():
@@ -153,7 +153,7 @@ def leer():
                                justify='right',
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
-    dataTable.grid(row=2, column=0, columnspan=20)
+    dataTable.grid(row = 2, column = 0, columnspan = 20)
     
     createColumns(data)
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
@@ -183,7 +183,7 @@ def makeAndShowGraph():
 
     canvas = FigureCanvasTkAgg(fig, root)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 8, column = 0, columnspan = 10)
+    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 10)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
