@@ -28,6 +28,7 @@ from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered,leer_sql
 import class_model
 from pickle import dump, dumps, load, loads
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 def ask(text, range):
     while True:
@@ -137,33 +138,41 @@ def leer():
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
 
 def makeAndShowGraph():
-    top= Toplevel(root)
-    top.geometry("800x600")
-    top.title("Graph Display")
+    #top= Toplevel(root)
+    #top.geometry("800x600")
+    #top.title("Graph Display")
     global data
+    global root 
     num1, num2 = int(v1.get()), int(v2.get())
 
     model = regression(data, num1, num2)
 
     x, y = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
-    plt.plot(x, y, '.k')
-    plt.ylabel(selectedColumns.columns[1])
-    plt.xlabel(selectedColumns.columns[0])
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y, '.k')
+    ax.set_ylabel(selectedColumns.columns[1])
+    ax.set_xlabel(selectedColumns.columns[0])
     abline(model.get_slope(), model.get_intercept())
     eq = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
-    plt.title(f'{eq} / R²: {model.get_rsquare()}')
-    plt.grid()
+    ax.set_title(f'{eq} / R²: {model.get_rsquare()}')
+    ax.grid()
+
+    canvas = FigureCanvasTkAgg(fig, root)
+    canvas.draw()
+    canvas.get_tk_widget().grid(row=9, column=0, columnspan=10)
+
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
     
-    imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
-    imageLabel = customtkinter.CTkLabel(top, image = imagen)
+    #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
+    #imageLabel = customtkinter.CTkLabel(top, image = imagen)
     #imageLabel.grid(row = 20, column = 0, columnspan = 10)
-    imageLabel.pack()
-    imageLabel.image = imagen
-    top.mainloop()
-    top.attributes('-topmost', True)
+    #imageLabel.pack()
+    #imageLabel.image = imagen
+    #top.mainloop()
+    #top.attributes('-topmost', True)
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
@@ -184,7 +193,7 @@ if __name__ == '__main__':
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 4,columnspan=2)
     showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
-    quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
+    #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(root, text="", wraplength=width*0.9)
