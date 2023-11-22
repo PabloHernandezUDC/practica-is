@@ -144,8 +144,8 @@ def leer():
                                                  height=height*0.14,
                                                  corner_radius=10,
                                                  orientation='horizontal')
-    
-    printableData = data.head() # head coge por defecto las 5 primeras filas
+
+    printableData = data.select_dtypes(include=['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
     
     for i in range(len(printableData.columns)):        
         customtkinter.CTkLabel(dataTable,
@@ -153,7 +153,7 @@ def leer():
                                justify='right',
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
-    dataTable.grid(row=3, column=0, columnspan=20)
+    dataTable.grid(row=2, column=0, columnspan=20)
     
     createColumns(data)
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
@@ -178,12 +178,12 @@ def makeAndShowGraph():
     ax.set_xlabel(selectedColumns.columns[0])
     abline(model.get_slope(), model.get_intercept())
     eq = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
-    ax.set_title(f'{eq} / R²: {model.get_rsquare()}')
+    ax.set_title(f'{eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
     canvas = FigureCanvasTkAgg(fig, root)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 9, column = 0, columnspan = 10)
+    canvas.get_tk_widget().grid(row = 8, column = 0, columnspan = 10)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
@@ -214,7 +214,7 @@ if __name__ == '__main__':
     root.geometry(str(width) + 'x' + str(height))
 
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 2, column = 5)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 5)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
