@@ -124,15 +124,15 @@ def getColumns(data):
 def createColumns(data):
     scrollx = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
     scrolly = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
-    scrollx.grid(row=4,sticky=W)
-    scrolly.grid(row=6,sticky=W)
+    scrollx.grid(row=4,column=1,sticky=W)
+    scrolly.grid(row=6,column=1,sticky=W)
     global v1
     global v2
     v1 = IntVar()
     v2 = IntVar()
     i = 0
-    customtkinter.CTkLabel(scrollx,text="X:").grid(row=0,column=0)
-    customtkinter.CTkLabel(scrolly,text="Y:").grid(row=0,column=0)
+    customtkinter.CTkLabel(root,text="X:").grid(row=4,column=0)
+    customtkinter.CTkLabel(root,text="Y:").grid(row=6,column=0)
     
     for col in getColumns(data):
         scrollx.grid_columnconfigure(i,weight=1)
@@ -197,7 +197,7 @@ def makeAndShowGraph():
 
     canvas = FigureCanvasTkAgg(fig, root)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 10)
+    canvas.get_tk_widget().grid(row = 10, column = 0, columnspan = 10)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
