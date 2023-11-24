@@ -19,6 +19,7 @@ import time
 import pandas as p
 import numpy as np
 import customtkinter
+import tkinter
 import class_model
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
@@ -166,10 +167,10 @@ def leer():
                                justify='right',
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
-    dataTable.grid(row = 2, column = 0, columnspan = 20)
+    dataTable.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data)
-    filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
+    filepath.configure(text = f"{root.filename.name}")
 
 
 def makeAndShowGraph():
@@ -225,18 +226,22 @@ if __name__ == '__main__':
     
     width, height = 1920, 1080
     root.geometry(str(width) + 'x' + str(height))
-
-
-
     
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 4,columnspan=2)
-    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 2, column = 10, columnspan=2)
+    #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
+
+    filepath = customtkinter.CTkLabel(root, text="Ruta:", wraplength = width*0.9)
+    filepath.grid(row = 1, column = 0, columnspan = 1)
+
+    frame = tkinter.Frame(root, width = width, borderwidth=2, relief="solid")
+    frame.grid(row=1, column=1, columnspan=12, padx=10, pady=10)
+    
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = customtkinter.CTkLabel(root, text="", wraplength = width*0.9)
-    filepath.grid(row = 0, column = 0, columnspan = 10)
+    filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
+    filepath.pack()
     
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
