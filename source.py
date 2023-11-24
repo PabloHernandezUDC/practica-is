@@ -79,9 +79,12 @@ def regression(d, i, j):
     return modelo_obj
 
 
-def serialize(obj, name_file):
-    with open(str(name_file), "wb") as f:
+def guardar_modelo(obj):
+    file_name = filedialog.asksaveasfilename(defaultextension=".pickle", filetypes=[("Pickle files", "*.pickle")])
+    # Serializar el objeto y guardarlo en el archivo
+    with open(file_name, "wb") as f:
         dump(obj, f)
+
 
 
 def deserialize(name_file):
@@ -144,7 +147,7 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 5)
+    customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 7)
 
 
 def leer():
@@ -197,10 +200,12 @@ def makeAndShowGraph():
 
     canvas = FigureCanvasTkAgg(fig, root)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 10, column = 0, columnspan = 10)
+    canvas.get_tk_widget().grid(row = 10, column = 0, columnspan = 8)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
+
+    customtkinter.CTkButton(root, text = "Guardar modelo", command = guardar_modelo(model)).grid(row = 10, column = 9)
     
     #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
     #imageLabel = customtkinter.CTkLabel(top, image = imagen)
@@ -215,20 +220,30 @@ if __name__ == '__main__':
 
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
+    # Obtener el ancho y alto de la pantalla
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+
+# Definir el tamaño de la ventana
+    root.geometry(f"{width}x{height}")  # Ajustar ventana al tamaño de la pantalla
+
+# Mostrar la ventana maximizada
+    root.state('zoomed')
+
     #root.attributes('-fullscreen',True)
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
-    for i in range(11):
+    for i in range(12):
         root.grid_columnconfigure(i, weight = 1)
-    for i in range(10):
+    for i in range(11):
         root.grid_rowconfigure(i, weight = 1)
     root.grid_rowconfigure(10, weight = 50)
     
-    width, height = 1920, 1080
-    root.geometry(str(width) + 'x' + str(height))
+    # width, height = 1920, 1080
+    # root.geometry(str(width) + 'x' + str(height))
     
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 2, column = 10, columnspan=2)
+    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
@@ -237,7 +252,7 @@ if __name__ == '__main__':
     filepath.grid(row = 1, column = 0, columnspan = 1)
 
     frame = tkinter.Frame(root, width = width, borderwidth=2, relief="solid")
-    frame.grid(row=1, column=1, columnspan=12, padx=10, pady=10)
+    frame.grid(row=1, column=1, columnspan=10, padx=10, pady=10)
     
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
