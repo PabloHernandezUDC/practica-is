@@ -205,7 +205,7 @@ def makeAndShowGraph():
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    customtkinter.CTkButton(root, text = "Guardar modelo", command = guardar_modelo(model)).grid(row = 10, column = 9)
+    customtkinter.CTkButton(root, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
     
     #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
     #imageLabel = customtkinter.CTkLabel(top, image = imagen)
