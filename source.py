@@ -26,7 +26,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from tkinter import *
 from tkinter import PhotoImage
-from tkinter import filedialog
+from tkinter import simpledialog, filedialog
 from PIL import Image, ImageTk
 from leerBD import createDB, readRows, readOrdered,leer_sql
 import class_model
@@ -75,11 +75,13 @@ def regression(d, i, j):
     meanSquaredError = np.mean((model.predict(x) - y)**2)
     meanSquaredError = round(meanSquaredError, 2)
     
-    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, y, root.filename.name)
+    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, y, root.filename.name, None)
     return modelo_obj
 
 
 def guardar_modelo(obj):
+    description= simpledialog.askstring("Input", "Añade una descripción al modelo:")
+    obj.set_description(description)
     file_name = filedialog.asksaveasfilename(defaultextension=".pickle", filetypes=[("Pickle files", "*.pickle")])
     # Serializar el objeto y guardarlo en el archivo
     with open(file_name, "wb") as f:

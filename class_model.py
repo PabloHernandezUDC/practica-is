@@ -32,7 +32,7 @@ class Model():
     set_filepath(filepath): Establece el valor de la ruta del archivo.
     """
 
-    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath):
+    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath, description):
         self.intercept = intercept
         self.slope = slope
         self.rsquare = rsquare
@@ -42,7 +42,7 @@ class Model():
         self.columny = columny
         self.filepath = filepath # para este parámetro habría que crear una variable en el código principal que llame a la ruta del archivo,
                                  # y luego al crear el modelo poner esa variable como este parámetro
-
+        self.description= description
     def get_intercept(self):
         return self.intercept
     
@@ -90,6 +90,12 @@ class Model():
     
     def set_filepath(self, filepath):
         self.filepath = filepath
+
+    def get_description(self):
+        return self.description
+    
+    def set_description(self, description):
+        self.description = description
 
 # Formas de mostrar el docstring
 # help(Model)
