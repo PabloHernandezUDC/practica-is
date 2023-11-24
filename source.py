@@ -121,23 +121,13 @@ def getColumns(data):
 
 
 def createColumns(data):
-    scrollx = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
-    scrolly = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
-    scrollx.grid(row=4,sticky=W)
-    scrolly.grid(row=6,sticky=W)
     global v1
     global v2
     v1 = IntVar()
     v2 = IntVar()
     i = 0
-    customtkinter.CTkLabel(scrollx,text="X:").grid(row=0,column=0)
-    customtkinter.CTkLabel(scrolly,text="Y:").grid(row=0,column=0)
-    
-    for col in getColumns(data):
-        scrollx.grid_columnconfigure(i,weight=1)
-        scrolly.grid_columnconfigure(i,weight=1)
-        i+=1
-    i = 0
+    customtkinter.CTkLabel(root,text="X:").grid(row=4,column=0)
+    customtkinter.CTkLabel(root,text="Y:").grid(row=6,column=0)
     for col in getColumns(data):
         
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
@@ -150,24 +140,6 @@ def leer():
     global data, width, height
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
-    
-    # MOSTRAR LOS DATOS EN UNA TABLA
-    dataTable = customtkinter.CTkScrollableFrame(master=root,
-                                                 width=width*0.75,
-                                                 height=height*0.14,
-                                                 corner_radius=10,
-                                                 orientation='horizontal')
-
-    printableData = data.select_dtypes(include=['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
-    
-    for i in range(len(printableData.columns)):        
-        customtkinter.CTkLabel(dataTable,
-                               text = printableData.columns[i] + '\n' + printableData.iloc[:, i].to_string(index=False),
-                               justify='right',
-                               font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
-                               ).grid(row=0, column=i, padx=10, sticky=W)
-    dataTable.grid(row = 2, column = 0, columnspan = 20)
-    
     createColumns(data)
     filepath.configure(text = f"Ruta del archivo seleccionado: {root.filename.name}")
 
@@ -196,7 +168,7 @@ def makeAndShowGraph():
 
     canvas = FigureCanvasTkAgg(fig, root)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 10)
+    canvas.get_tk_widget().grid(row=9, column=0, columnspan=10)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
@@ -214,6 +186,8 @@ if __name__ == '__main__':
 
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
+    width, height = 1920, 1080
+    root.geometry(str(width) + 'x' + str(height))
     #root.attributes('-fullscreen',True)
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
@@ -226,12 +200,9 @@ if __name__ == '__main__':
     width, height = 1920, 1080
     root.geometry(str(width) + 'x' + str(height))
 
-
-
-    
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 4,columnspan=2)
-    showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
+    #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 5,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
