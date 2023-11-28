@@ -127,8 +127,8 @@ def getColumns(data):
 
 
 def createColumns(data):
-    scrollx = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
-    scrolly = customtkinter.CTkScrollableFrame(root,orientation="horizontal",height=30,width=800)
+    scrollx = customtkinter.CTkScrollableFrame(screen,orientation="horizontal",height=30,width=800)
+    scrolly = customtkinter.CTkScrollableFrame(screen,orientation="horizontal",height=30,width=800)
     scrollx.grid(row=4,column=1,sticky=W)
     scrolly.grid(row=6,column=1,sticky=W)
     global v1
@@ -136,8 +136,8 @@ def createColumns(data):
     v1 = IntVar()
     v2 = IntVar()
     i = 0
-    customtkinter.CTkLabel(root,text="X:").grid(row=4,column=0)
-    customtkinter.CTkLabel(root,text="Y:").grid(row=6,column=0)
+    customtkinter.CTkLabel(screen,text="X:").grid(row=4,column=0)
+    customtkinter.CTkLabel(screen,text="Y:").grid(row=6,column=0)
     
     for col in getColumns(data):
         scrollx.grid_columnconfigure(i,weight=1)
@@ -149,7 +149,7 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 7)
+    customtkinter.CTkButton(screen, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 7)
 
 
 def leer():
@@ -158,7 +158,7 @@ def leer():
     data = extractDataFromFile(root.filename.name)
     
     # MOSTRAR LOS DATOS EN UNA TABLA
-    dataTable = customtkinter.CTkScrollableFrame(master=root,
+    dataTable = customtkinter.CTkScrollableFrame(master=screen,
                                                  width=width*0.75,
                                                  height=height*0.14,
                                                  corner_radius=10,
@@ -200,14 +200,14 @@ def makeAndShowGraph():
     ax.set_title(f'{eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
-    canvas = FigureCanvasTkAgg(fig, root)
+    canvas = FigureCanvasTkAgg(fig, screen)
     canvas.draw()
     canvas.get_tk_widget().grid(row = 10, column = 0, columnspan = 8)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    customtkinter.CTkButton(root, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
+    customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
     
     #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
     #imageLabel = customtkinter.CTkLabel(top, image = imagen)
@@ -222,6 +222,8 @@ if __name__ == '__main__':
 
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
+    screen = customtkinter.CTkScrollableFrame(root)
+    screen.pack(expand=True, fill='both')
     # Obtener el ancho y alto de la pantalla
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
@@ -236,24 +238,24 @@ if __name__ == '__main__':
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
     for i in range(12):
-        root.grid_columnconfigure(i, weight = 1)
+        screen.grid_columnconfigure(i, weight = 1)
     for i in range(11):
-        root.grid_rowconfigure(i, weight = 1)
-    root.grid_rowconfigure(10, weight = 50)
+        screen.grid_rowconfigure(i, weight = 1)
+    screen.grid_rowconfigure(10, weight = 50)
     
     # width, height = 1920, 1080
     # root.geometry(str(width) + 'x' + str(height))
     
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(root, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
+    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
 
-    filepath = customtkinter.CTkLabel(root, text="Ruta:", wraplength = width*0.9)
+    filepath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
     filepath.grid(row = 1, column = 0, columnspan = 1)
 
-    frame = tkinter.Frame(root, width = width, borderwidth=2, relief="solid")
+    frame = tkinter.Frame(screen, width = width, borderwidth=2, relief="solid")
     frame.grid(row=1, column=1, columnspan=10, padx=10, pady=10)
     
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
