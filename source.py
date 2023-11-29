@@ -159,7 +159,7 @@ def leer():
     
     # MOSTRAR LOS DATOS EN UNA TABLA
     dataTable = customtkinter.CTkScrollableFrame(master=screen,
-                                                 width=width*0.75,
+                                                 width=width*0.9,
                                                  height=height*0.14,
                                                  corner_radius=10,
                                                  orientation='horizontal')
@@ -172,6 +172,7 @@ def leer():
                                justify='right',
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
+        dataTable.grid_columnconfigure(i, weight=1)
     dataTable.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data)
