@@ -88,13 +88,19 @@ def guardar_modelo(obj):
         dump(obj, f)
 
 
-
 def cargar_modelo():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpicked_model = load(f)
     #return unpicked_model
     customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
+
+
+def prediccion(modelo, x_usuario):
+    # Realizar la predicción con el modelo
+    y_predicho = modelo.predict(np.array([[x_usuario]]))
+
+    return y_predicho
 
 
 def extractDataFromFile(route):
@@ -188,6 +194,26 @@ def makeModel():
     model = regression(data, num1, num2)
     makeAndShowGraph(model)
 
+def realizar_prediccion(model, x_usuario):
+    try:
+        # Convertir el valor ingresado por el usuario a un número
+        x_usuario = float(x_usuario)
+
+        # Realizar la predicción con el modelo
+        y_predicho = prediccion(model, x_usuario)
+        
+        # Mostrar la predicción en la interfaz
+        #predicciones_label = customtkinter.CTkLabel(screen, text=f"Predicción para x={x_usuario}: y = {y_predicho[0]}")
+        predicciones_label1 = customtkinter.CTkLabel(screen, text=f"{round(model.get_slope(), 2)} *")
+        predicciones_label1.grid(row=12, column=8, columnspan=1)
+        
+        predicciones_label2 = customtkinter.CTkLabel(screen, text = f"+ {round(model.get_slope(), 2)} = {y_predicho[0]}")
+        predicciones_label2.grid(row = 12, column = 10, columnspan = 10)
+        
+    except ValueError:
+        # Manejar el caso en que el usuario ingrese un valor no válido
+        customtkinter.CTkLabel(screen, text="Error: Ingresa un valor numérico válido para x", foreground="red").grid(row=14, column=10, columnspan=8)
+
 def makeAndShowGraph(model):
     #top= Toplevel(root)
     #top.geometry("800x600")
@@ -215,6 +241,13 @@ def makeAndShowGraph(model):
 
     customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
     
+    x_name = customtkinter.CTkLabel(screen, text = "Elija el valor de ...") #falta obtener el nombre de la columna x para sustituir por los puntos
+    x_name.grid(row = 11, column = 9, columnspan = 5)
+    x_entry = customtkinter.CTkEntry(screen)
+    x_entry.grid(row = 12, column = 9, columnspan = 1)
+    pred_button = customtkinter.CTkButton(screen, text="Realizar Predicción", command=lambda: realizar_prediccion(model, x_entry.get()))
+    pred_button.grid(row = 13, column = 9, columnspan = 2)
+
     #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
     #imageLabel = customtkinter.CTkLabel(top, image = imagen)
     #imageLabel.grid(row = 20, column = 0, columnspan = 10)
@@ -226,6 +259,7 @@ def makeAndShowGraph(model):
 
 if __name__ == '__main__':
 
+    x = 20
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
     screen = customtkinter.CTkScrollableFrame(root)
