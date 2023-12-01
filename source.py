@@ -129,17 +129,20 @@ def getColumns(data):
 
 
 def createColumns(data):
-    scrollx = customtkinter.CTkScrollableFrame(screen,orientation="horizontal",height=30,width=800)
-    scrolly = customtkinter.CTkScrollableFrame(screen,orientation="horizontal",height=30,width=800)
-    scrollx.grid(row=4,column=1,sticky=W)
-    scrolly.grid(row=6,column=1,sticky=W)
+    frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.14,corner_radius=10)
+    frameColumnas.grid(row=7,columnspan=9)
+    customtkinter.CTkLabel(frameColumnas,text="X:").place(x=100,y=0)
+    customtkinter.CTkLabel(frameColumnas,text="Y:").place(x=100,y=100)
+    scrollx = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
+    scrolly = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
+    scrollx.place(x=120,y=0)
+    scrolly.place(x=120,y=100)
     global v1
     global v2
     v1 = IntVar()
     v2 = IntVar()
     i = 0
-    customtkinter.CTkLabel(screen,text="X:").grid(row=4,column=0)
-    customtkinter.CTkLabel(screen,text="Y:").grid(row=6,column=0)
+    
     
     for col in getColumns(data):
         scrollx.grid_columnconfigure(i,weight=1)
@@ -151,7 +154,7 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(screen, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row = 5, column = 7)
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).place(x=1400,y=50)
 
 
 def leer():
@@ -203,7 +206,7 @@ def makeAndShowGraph(model):
     ax.set_xlabel(selectedColumns.columns[0])
     abline(model.get_slope(), model.get_intercept())
     eq = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
-    ax.set_title(f'{eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
+    ax.set_title(f'y= {eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
     canvas = FigureCanvasTkAgg(fig, screen)
