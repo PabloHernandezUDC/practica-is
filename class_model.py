@@ -30,6 +30,7 @@ class Model():
     set_columny(columny): Establece el valor de la columna y.
     get_filepath(): Obtiene el valor de la ruta del archivo.
     set_filepath(filepath): Establece el valor de la ruta del archivo.
+    predict(input_value) : Obtiene la predcción de y a partir de un valor de x.
     """
 
     def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath, description):
@@ -96,6 +97,10 @@ class Model():
     
     def set_description(self, description):
         self.description = description
+    
+    def predict(self, input_value):
+        prediction = self.intercept + self.slope * input_value
+        return prediction
 
 # Formas de mostrar el docstring
 # help(Model)
