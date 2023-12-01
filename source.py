@@ -89,10 +89,12 @@ def guardar_modelo(obj):
 
 
 
-def deserialize(name_file):
-    with open(str(name_file), "rb") as f:
+def cargar_modelo():
+    root.filename = filedialog.askopenfile(initialdir="modelos/")
+    with open(root.filename.name, "rb") as f:
         unpicked_model = load(f)
-    return unpicked_model
+    #return unpicked_model
+    customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
 
 
 def extractDataFromFile(route):
@@ -149,7 +151,7 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(screen, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 5, column = 7)
+    customtkinter.CTkButton(screen, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row = 5, column = 7)
 
 
 def leer():
@@ -178,16 +180,19 @@ def leer():
     createColumns(data)
     filepath.configure(text = f"{root.filename.name}")
 
-
-def makeAndShowGraph():
-    #top= Toplevel(root)
-    #top.geometry("800x600")
-    #top.title("Graph Display")
+def makeModel():
     global data
     global root 
     num1, num2 = int(v1.get()), int(v2.get())
 
     model = regression(data, num1, num2)
+    makeAndShowGraph(model)
+
+def makeAndShowGraph(model):
+    #top= Toplevel(root)
+    #top.geometry("800x600")
+    #top.title("Graph Display")
+
 
     x, y = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
@@ -249,6 +254,8 @@ if __name__ == '__main__':
     
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
+    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 6, columnspan=1)
+
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
