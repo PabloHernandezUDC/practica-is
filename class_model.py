@@ -44,6 +44,7 @@ class Model():
         self.filepath = filepath # para este parámetro habría que crear una variable en el código principal que llame a la ruta del archivo,
                                  # y luego al crear el modelo poner esa variable como este parámetro
         self.description= description
+    
     def get_intercept(self):
         return self.intercept
     

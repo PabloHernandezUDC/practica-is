@@ -34,8 +34,6 @@ from pickle import dump, dumps, load, loads
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-
-
 def ask(text, range):
     while True:
         try:
@@ -65,7 +63,6 @@ def regression(d, i, j):
 
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
-    #np.set_printoptions(threshold=np.inf)
 
     model = LinearRegression().fit(x, y)
 
@@ -80,9 +77,9 @@ def regression(d, i, j):
 
 
 def guardar_modelo(obj):
-    description= simpledialog.askstring("Input", "Añade una descripción al modelo:")
+    description = simpledialog.askstring("Input", "Añade una descripción al modelo:")
     obj.set_description(description)
-    file_name = filedialog.asksaveasfilename(defaultextension=".pickle", filetypes=[("Pickle files", "*.pickle")])
+    file_name = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
     # Serializar el objeto y guardarlo en el archivo
     with open(file_name, "wb") as f:
         dump(obj, f)
@@ -92,8 +89,8 @@ def cargar_modelo():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpicked_model = load(f)
-    #return unpicked_model
-    customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
+    customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", 
+                            command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
 
 
 def prediccion(modelo, x_usuario):
@@ -135,59 +132,61 @@ def getColumns(data):
 
 
 def createColumns(data):
-    frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.14,corner_radius=10)
-    frameColumnas.grid(row=7,columnspan=9)
-    customtkinter.CTkLabel(frameColumnas,text="X:").place(x=100,y=0)
-    customtkinter.CTkLabel(frameColumnas,text="Y:").place(x=100,y=100)
-    scrollx = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
-    scrolly = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
-    scrollx.place(x=120,y=0)
-    scrolly.place(x=120,y=100)
+    frameColumnas = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14, corner_radius = 10)
+    frameColumnas.grid(row = 7, columnspan = 9)
+    customtkinter.CTkLabel(frameColumnas, text = "X:").place(x = 100, y = 0)
+    customtkinter.CTkLabel(frameColumnas, text = "Y:").place(x = 100, y = 100)
+    scrollx = customtkinter.CTkScrollableFrame(frameColumnas, orientation = "horizontal", height = 30, width = 800)
+    scrolly = customtkinter.CTkScrollableFrame(frameColumnas, orientation = "horizontal", height = 30, width = 800)
+    scrollx.place(x = 120, y = 0)
+    scrolly.place(x = 120, y = 100)
     global v1
     global v2
     v1 = IntVar()
     v2 = IntVar()
-    i = 0
     
-    
+    i = 0 
     for col in getColumns(data):
-        scrollx.grid_columnconfigure(i,weight=1)
-        scrolly.grid_columnconfigure(i,weight=1)
-        i+=1
+        scrollx.grid_columnconfigure(i, weight = 1)
+        scrolly.grid_columnconfigure(i, weight = 1)
+        i += 1
+    
     i = 0
     for col in getColumns(data):
         
-        customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
-        customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
+        customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
+        customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         i += 1
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).place(x=1400,y=50)
+
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).place(x = 1400, y = 50)
 
 
 def leer():
     global data, width, height
-    root.filename = filedialog.askopenfile(initialdir="modelos/")
+    root.filename = filedialog.askopenfile(initialdir = "modelos/")
     data = extractDataFromFile(root.filename.name)
     
     # MOSTRAR LOS DATOS EN UNA TABLA
-    dataTable = customtkinter.CTkScrollableFrame(master=screen,
-                                                 width=width*0.9,
-                                                 height=height*0.14,
-                                                 corner_radius=10,
-                                                 orientation='horizontal')
+    dataTable = customtkinter.CTkScrollableFrame(master = screen,
+                                                 width = width*0.9,
+                                                 height = height*0.14,
+                                                 corner_radius = 10,
+                                                 orientation = 'horizontal')
 
-    printableData = data.select_dtypes(include=['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
+    printableData = data.select_dtypes(include = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
     
     for i in range(len(printableData.columns)):        
         customtkinter.CTkLabel(dataTable,
                                text = printableData.columns[i] + '\n' + printableData.iloc[:, i].to_string(index=False),
-                               justify='right',
-                               font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
-                               ).grid(row=0, column=i, padx=10, sticky=W)
-        dataTable.grid_columnconfigure(i, weight=1)
+                               justify = 'right',
+                               font = (None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
+                               ).grid(row = 0, column = i, padx = 10, sticky = W)
+        dataTable.grid_columnconfigure(i, weight = 1)
     dataTable.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data)
     filepath.configure(text = f"{root.filename.name}")
+
 
 def makeModel():
     global data
@@ -196,6 +195,7 @@ def makeModel():
 
     model = regression(data, num1, num2)
     makeAndShowGraph(model)
+
 
 def realizar_prediccion(model, x_usuario):
     try:
@@ -208,21 +208,18 @@ def realizar_prediccion(model, x_usuario):
         # Mostrar la predicción en la interfaz
         #predicciones_label = customtkinter.CTkLabel(screen, text=f"Predicción para x={x_usuario}: y = {y_predicho[0]}")
         predicciones_label1 = customtkinter.CTkLabel(screen, text=f"{round(model.get_slope(), 2)} *")
-        predicciones_label1.grid(row=12, column=8, columnspan=1)
+        predicciones_label1.grid(row = 12, column = 8, columnspan = 1)
         
         predicciones_label2 = customtkinter.CTkLabel(screen, text = f"+ {round(model.get_slope(), 2)} = {y_predicho[0]}")
         predicciones_label2.grid(row = 12, column = 10, columnspan = 10)
         
     except ValueError:
         # Manejar el caso en que el usuario ingrese un valor no válido
-        customtkinter.CTkLabel(screen, text="Error: Ingresa un valor numérico válido para x", foreground="red").grid(row=14, column=10, columnspan=8)
+        customtkinter.CTkLabel(screen, text = "Error: Ingresa un valor numérico válido para x", 
+                               foreground = "red").grid(row = 14, column = 10, columnspan = 8)
+
 
 def makeAndShowGraph(model):
-    #top= Toplevel(root)
-    #top.geometry("800x600")
-    #top.title("Graph Display")
-
-
     x, y = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -244,20 +241,12 @@ def makeAndShowGraph(model):
 
     customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
     
-    x_name = customtkinter.CTkLabel(screen, text = "Elija el valor de ...") #falta obtener el nombre de la columna x para sustituir por los puntos
+    x_name = customtkinter.CTkLabel(screen, text = "Elija el valor de ...") # falta obtener el nombre de la columna x para sustituir por los puntos
     x_name.grid(row = 11, column = 9, columnspan = 5)
     x_entry = customtkinter.CTkEntry(screen)
     x_entry.grid(row = 12, column = 9, columnspan = 1)
     pred_button = customtkinter.CTkButton(screen, text="Realizar Predicción", command=lambda: realizar_prediccion(model, x_entry.get()))
     pred_button.grid(row = 13, column = 9, columnspan = 2)
-
-    #imagen = customtkinter.CTkImage(light_image = Image.open(filename), size=(640, 480))
-    #imageLabel = customtkinter.CTkLabel(top, image = imagen)
-    #imageLabel.grid(row = 20, column = 0, columnspan = 10)
-    #imageLabel.pack()
-    #imageLabel.image = imagen
-    #top.mainloop()
-    #top.attributes('-topmost', True)
 
 
 if __name__ == '__main__':
@@ -277,7 +266,6 @@ if __name__ == '__main__':
 # Mostrar la ventana maximizada
     root.state('zoomed')
 
-    #root.attributes('-fullscreen',True)
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
     for i in range(12):
@@ -286,16 +274,9 @@ if __name__ == '__main__':
         screen.grid_rowconfigure(i, weight = 1)
     screen.grid_rowconfigure(10, weight = 50)
     
-    # width, height = 1920, 1080
-    # root.geometry(str(width) + 'x' + str(height))
-    
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
     loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 6, columnspan=1)
-
-    #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
-    #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
-
 
     filepath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
     filepath.grid(row = 1, column = 0, columnspan = 1)
