@@ -135,14 +135,15 @@ def getColumns(data):
 
 
 def createColumns(data):
-    frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.14,corner_radius=10)
-    frameColumnas.grid(row=7,columnspan=9)
-    customtkinter.CTkLabel(frameColumnas,text="X:").place(x=100,y=0)
-    customtkinter.CTkLabel(frameColumnas,text="Y:").place(x=100,y=100)
+    frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
+    frameColumnas.grid(column=0,row=7,columnspan=9)
+    frameColumnas.grid_columnconfigure(0, minsize=100)
+    customtkinter.CTkLabel(frameColumnas,text="X:").grid(row=0,column=1,sticky=E)
+    customtkinter.CTkLabel(frameColumnas,text="Y:").grid(row=1,column=1,sticky=E)
     scrollx = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
     scrolly = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
-    scrollx.place(x=120,y=0)
-    scrolly.place(x=120,y=100)
+    scrollx.grid(row=0,column=2,sticky=E)
+    scrolly.grid(row=1,column=2,sticky=E)
     global v1
     global v2
     v1 = IntVar()
@@ -160,7 +161,8 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i,sticky=W)
         i += 1
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).place(x=1400,y=50)
+    frameColumnas.grid_columnconfigure(3, minsize=width*0.2) 
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row=0,column=4,rowspan=2)
 
 
 def leer():
@@ -168,6 +170,19 @@ def leer():
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     data = extractDataFromFile(root.filename.name)
     
+    filepath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
+    filepath.grid(row = 1, column = 3, columnspan = 2)
+    
+    frame = tkinter.Frame(screen, width = width, borderwidth=2, relief="solid")
+    frame.grid(row=1, column=1, columnspan=10, padx=10, pady=10)
+    
+    # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
+    filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
+    filepath.pack()
+
+
+
+
     # MOSTRAR LOS DATOS EN UNA TABLA
     dataTable = customtkinter.CTkScrollableFrame(master=screen,
                                                  width=width*0.9,
@@ -184,11 +199,11 @@ def leer():
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
         dataTable.grid_columnconfigure(i, weight=1)
-    dataTable.grid(row = 3, column = 0, columnspan = 20)
+    dataTable.grid(row = 4, column = 0, columnspan = 20)
     
     createColumns(data)
     filepath.configure(text = f"{root.filename.name}")
-
+    
 def makeModel():
     global data
     global root 
@@ -290,22 +305,14 @@ if __name__ == '__main__':
     # root.geometry(str(width) + 'x' + str(height))
     
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 10, columnspan=2)
-    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 6, columnspan=1)
+    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 7, columnspan=1)
+    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 3, column = 6, columnspan=1)
 
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
 
-    filepath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
-    filepath.grid(row = 1, column = 0, columnspan = 1)
-
-    frame = tkinter.Frame(screen, width = width, borderwidth=2, relief="solid")
-    frame.grid(row=1, column=1, columnspan=10, padx=10, pady=10)
     
-    # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
-    filepath.pack()
     
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
