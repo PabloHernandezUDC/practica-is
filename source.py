@@ -34,32 +34,16 @@ from pickle import dump, dumps, load, loads
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-def ask(text, range):
-    while True:
-        try:
-            result = int(input(text))
-            if result < 0:
-                print('Introduce un número positivo.')
-                continue
-            if result > range and range != 0:
-                print(f'Introduce un número menor que {range}.')
-                continue
-            break
-        except ValueError:
-            print('Eso no es un número válido.')
-    return result
-
-
 def abline(slope, intercept):
-    axes = plt.gca()
+    axes = plt.gca() 
     x_vals = np.array(axes.get_xlim())
     y_vals = intercept + slope * x_vals
     plt.plot(x_vals, y_vals, '-r') # formato = '[marker][line][color]'
 
 
-def regression(d, i, j):
+def regression(data, i, j):
     plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
-    selectedColumns = d.iloc[:, [i, j]]
+    selectedColumns = data.iloc[:, [i, j]]
 
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
@@ -72,7 +56,7 @@ def regression(d, i, j):
     meanSquaredError = np.mean((model.predict(x) - y)**2)
     meanSquaredError = round(meanSquaredError, 2)
     
-    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, y, root.filename.name, None)
+    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, y, root.filename.name)
     return modelo_obj
 
 
@@ -93,11 +77,11 @@ def cargar_modelo():
                             command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
 
 
-def prediccion(modelo, x_usuario):
-    # Realizar la predicción con el modelo
-    y_predicho = modelo.predict(np.array([[x_usuario]]))
+# def prediccion(modelo, x_usuario):
+#     # Realizar la predicción con el modelo
+#     y_predicho = modelo.predict(np.array([[x_usuario]]))
 
-    return y_predicho
+#     return y_predicho
 
 
 def extractDataFromFile(route):
@@ -123,11 +107,8 @@ def extractDataFromFile(route):
 def getColumns(data):
     l =  []
     for columna in data.columns:
-        k = data[columna].dtype
-        if k != 'object':
+        if data[columna].dtype not in ('StringDtype', 'datetime64'): #Para descartar strings y fechas
             l.append(columna)
-        else:
-            pass
     return l
 
 
