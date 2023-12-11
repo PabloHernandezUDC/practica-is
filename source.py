@@ -113,11 +113,14 @@ def getColumns(data):
 
 
 def createColumns(data):
-    frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
-    frameColumnas.grid(column=0,row=7,columnspan=9)
+    #frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
+    frameColumnas = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
+    frameColumnas.grid(row = 5, column = 0, columnspan = 12)
+    #frameColumnas.grid(column=0,row=7,columnspan=9)
     frameColumnas.grid_columnconfigure(0, minsize=100)
-    customtkinter.CTkLabel(frameColumnas,text="X:").grid(row=0,column=1,sticky=E)
-    customtkinter.CTkLabel(frameColumnas,text="Y:").grid(row=1,column=1,sticky=E)
+    customtkinter.CTkLabel(frameColumnas,text="X:").grid(row=0,column=0,sticky=E)
+    customtkinter.CTkLabel(frameColumnas,text="Y:").grid(row=1,column=0,sticky=E)
     scrollx = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
     scrolly = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
     scrollx.grid(row=0,column=2,sticky=E)
@@ -140,7 +143,7 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         i += 1
     frameColumnas.grid_columnconfigure(3, minsize=width*0.2) 
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row=0,column=4,rowspan=2)
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row=0,column=3,rowspan=2)
 
 
 def leer():
@@ -168,6 +171,7 @@ def leer():
                                                  corner_radius = 10,
                                                  orientation = 'horizontal')
 
+
     printableData = data.select_dtypes(include = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
     
     for i in range(len(printableData.columns)):        
@@ -177,7 +181,7 @@ def leer():
                                font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row=0, column=i, padx=10, sticky=W)
         dataTable.grid_columnconfigure(i, weight=1)
-    dataTable.grid(row = 4, column = 0, columnspan = 20)
+    dataTable.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data)
     filepath.configure(text = f"{root.filename.name}")
@@ -228,12 +232,12 @@ def makeAndShowGraph(model):
 
     canvas = FigureCanvasTkAgg(fig, screen)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 10, column = 0, columnspan = 8)
+    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 8)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 10, column = 9)
+    customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 6, column = 9)
     
     x_name = customtkinter.CTkLabel(screen, text = "Elija el valor de ...") # falta obtener el nombre de la columna x para sustituir por los puntos
     x_name.grid(row = 11, column = 9, columnspan = 5)
@@ -246,31 +250,36 @@ def makeAndShowGraph(model):
 if __name__ == '__main__':
 
     x = 20
+    
+
+    # Obtener el ancho y alto de la pantalla
+  
+
     # CREAR LA VENTANA PRINCIPAL
     root = customtkinter.CTk()
-    screen = customtkinter.CTkScrollableFrame(root)
-    screen.pack(expand=True, fill='both')
-    # Obtener el ancho y alto de la pantalla
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
+    root.geometry(f"{width}x{height}")  # Ajustar ventana al tamaño de la pantalla
+    screen = customtkinter.CTkScrollableFrame(root)
+    screen.pack(expand=True, fill='both')
 
 # Definir el tamaño de la ventana
-    root.geometry(f"{width}x{height}")  # Ajustar ventana al tamaño de la pantalla
+    
 
 # Mostrar la ventana maximizada
     root.state('zoomed')
 
     root.protocol('WM_DELETE_WINDOW', quit) # para cerrar bien la ventana cuando se presiona la x
     root.title("Regresión lineal")
-    for i in range(12):
+    for i in range(11):
         screen.grid_columnconfigure(i, weight = 1)
     for i in range(11):
         screen.grid_rowconfigure(i, weight = 1)
-    screen.grid_rowconfigure(10, weight = 50)
+    #screen.grid_rowconfigure(10, weight = 50)
     
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 7, columnspan=1)
-    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 3, column = 6, columnspan=1)
+    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 5, columnspan=1)
+    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 5, columnspan=1)
 
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)

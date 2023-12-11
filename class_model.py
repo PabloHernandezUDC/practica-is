@@ -33,7 +33,7 @@ class Model():
     predict(input_value) : Obtiene la predcción de y a partir de un valor de x.
     """
 
-    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath, description: None):
+    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath, description=None):
         self.intercept = intercept
         self.slope = slope
         self.rsquare = rsquare
