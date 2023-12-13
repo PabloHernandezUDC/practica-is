@@ -1,5 +1,3 @@
-
-import time
 import pandas as p
 import numpy as np
 import customtkinter
@@ -7,14 +5,11 @@ import tkinter
 import class_model
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
 from tkinter import *
-from tkinter import PhotoImage
 from tkinter import simpledialog, filedialog
-from PIL import Image, ImageTk
-from leerBD import createDB, readRows, readOrdered,leer_sql
+from leerBD import leer_sql
 import class_model
-from pickle import dump, dumps, load, loads
+from pickle import dump, load
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -93,7 +88,7 @@ def getColumns(data):
     return l
 
 
-def createColumns(data, screen):
+def createColumns(data, screen, height, width):
     #frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
     frameColumnas = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
@@ -124,7 +119,7 @@ def createColumns(data, screen):
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         i += 1
     frameColumnas.grid_columnconfigure(3, minsize=width*0.2) 
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, screen)).grid(row=0,column=3,rowspan=2)
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, screen, height, width)).grid(row=0,column=3,rowspan=2)
 
 
 def leer(width, height, root, screen):
@@ -160,14 +155,14 @@ def leer(width, height, root, screen):
         dataTable.grid_columnconfigure(i, weight=1)
     dataTable.grid(row = 3, column = 0, columnspan = 20)
     
-    createColumns(data, screen)
+    createColumns(data, screen, height, width)
     filepath.configure(text = f"{root.filename.name}")
     
-def makeModel(data, screen): 
+def makeModel(data, screen, height, width): 
     num1, num2 = int(v1.get()), int(v2.get())
 
     model = regression(data, num1, num2, root)
-    makeAndShowGraph(model, screen)
+    makeAndShowGraph(model, screen, height, width)
 
 
 def realizar_prediccion(model, frame):
@@ -175,13 +170,13 @@ def realizar_prediccion(model, frame):
     try:
         namex = model.get_columnx_name()
 
-        x_name = customtkinter.CTkLabel(frame, text = f"Elija el valor de {namex}") 
-        x_name.grid(row = 0, column = 1, columnspan = 5)
+        x_name = customtkinter.CTkLabel(frame, text = f"{namex}") 
+        x_name.grid(row = 1, column = 1, columnspan = 3, sticky = W)
         x_entry = customtkinter.CTkEntry(frame)
-        x_entry.grid(row = 1, column = 1, columnspan = 1)
+        x_entry.grid(row = 2, column = 1, columnspan = 1)
 
         pred_button = customtkinter.CTkButton(frame, text="Realizar Predicción", command=lambda: showPrediction(model, x_entry.get(), frame))
-        pred_button.grid(row = 2, column = 1, columnspan = 2)
+        pred_button.grid(row = 3, column = 1, columnspan = 4)
 
     except ValueError:
         # Manejar el caso en que el usuario ingrese un valor no válido
@@ -197,21 +192,28 @@ def showPrediction(model, x_user, frame):
 
         # Mostrar la predicción en la interfaz
         predicciones_label1 = customtkinter.CTkLabel(frame, text=f"{round(model.get_slope(), 2)} *")
-        predicciones_label1.grid(row = 1, column = 0, columnspan = 1)
+        predicciones_label1.grid(row = 2, column = 0, columnspan = 1)
         
-        predicciones_label2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_slope(), 2)} = {y_predicho}")
-        predicciones_label2.grid(row = 1, column = 2, columnspan = 10)
+        namey = model.get_columny_name()
+        y_name = customtkinter.CTkLabel(frame, text = f"{namey}") 
+        y_name.grid(row = 1, column = 4, columnspan = 5)
 
-def predcitionFrame(model):
+        predicciones_label2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_intercept(), 2)}  =")
+        predicciones_label2.grid(row = 2, column = 2, columnspan = 2)
+
+        predicciones_label3 = customtkinter.CTkLabel(frame, text = f"{round(y_predicho, 2)}")
+        predicciones_label3.grid(row = 2, column = 4, columnspan = 5)
+
+def predcitionFrame(model, screen, height, width):
     framePrediction = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
-    framePrediction.grid(row = 11, column = 8, columnspan = 12)
+    framePrediction.grid(row = 11, columnspan = 30)
     #frameColumnas.grid(column=0,row=7,columnspan=9)
-    framePrediction.grid_columnconfigure(0, minsize=100)
+    framePrediction.grid_rowconfigure(0, minsize=height*0.1)
 
     realizar_prediccion(model, framePrediction)
 
-def makeAndShowGraph(model, screen):
+def makeAndShowGraph(model, screen, height, width):
     x, y = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -224,16 +226,20 @@ def makeAndShowGraph(model, screen):
     ax.set_title(f'y= {eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
-    canvas = FigureCanvasTkAgg(fig, screen)
+    frameGraph = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    frameGraph.grid(row = 6, columnspan=12)
+
+    canvas = FigureCanvasTkAgg(fig, frameGraph)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 8)
+    canvas.get_tk_widget().grid(row = 0, column = 0)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 6, column = 9)
+    frameGraph.grid_columnconfigure(1, minsize=width*0.10)
+    customtkinter.CTkButton(frameGraph, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 0, column = 2)
 
-    predcitionFrame(model)
+    predcitionFrame(model, screen, height, width)
     
 if __name__ == '__main__':
 

@@ -47,7 +47,7 @@ def regression(data, i, j):
 
     name_x = data.columns[i]
     name_y = data.columns[j]
-
+    
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
 
@@ -198,23 +198,19 @@ def makeModel():
     makeAndShowGraph(model)
 
 
+
 def realizar_prediccion(model, frame):
-    #framePrediction = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
-    #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
-    #framePrediction.grid(row = 11, column = 8, columnspan = 12)
-    #frameColumnas.grid(column=0,row=7,columnspan=9)
-    #framePrediction.grid_columnconfigure(0, minsize=100)
 
     try:
         namex = model.get_columnx_name()
 
-        x_name = customtkinter.CTkLabel(frame, text = f"Elija el valor de {namex}") 
-        x_name.grid(row = 0, column = 1, columnspan = 5)
+        x_name = customtkinter.CTkLabel(frame, text = f"{namex}") 
+        x_name.grid(row = 1, column = 1, columnspan = 3, sticky = W)
         x_entry = customtkinter.CTkEntry(frame)
-        x_entry.grid(row = 1, column = 1, columnspan = 1)
+        x_entry.grid(row = 2, column = 1, columnspan = 1)
 
         pred_button = customtkinter.CTkButton(frame, text="Realizar Predicción", command=lambda: showPrediction(model, x_entry.get(), frame))
-        pred_button.grid(row = 2, column = 1, columnspan = 2)
+        pred_button.grid(row = 3, column = 1, columnspan = 4)
 
     except ValueError:
         # Manejar el caso en que el usuario ingrese un valor no válido
@@ -230,19 +226,27 @@ def showPrediction(model, x_user, frame):
 
         # Mostrar la predicción en la interfaz
         predicciones_label1 = customtkinter.CTkLabel(frame, text=f"{round(model.get_slope(), 2)} *")
-        predicciones_label1.grid(row = 1, column = 0, columnspan = 1)
+        predicciones_label1.grid(row = 2, column = 0, columnspan = 1)
         
-        predicciones_label2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_slope(), 2)} = {y_predicho}")
-        predicciones_label2.grid(row = 1, column = 2, columnspan = 10)
+        namey = model.get_columny_name()
+        y_name = customtkinter.CTkLabel(frame, text = f"{namey}") 
+        y_name.grid(row = 1, column = 4, columnspan = 5)
+
+        predicciones_label2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_intercept(), 2)}  =")
+        predicciones_label2.grid(row = 2, column = 2, columnspan = 2)
+
+        predicciones_label3 = customtkinter.CTkLabel(frame, text = f"{round(y_predicho, 2)}")
+        predicciones_label3.grid(row = 2, column = 4, columnspan = 5)
 
 def predcitionFrame(model):
     framePrediction = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
-    framePrediction.grid(row = 11, column = 8, columnspan = 12)
+    framePrediction.grid(row = 11, columnspan = 30)
     #frameColumnas.grid(column=0,row=7,columnspan=9)
-    framePrediction.grid_columnconfigure(0, minsize=100)
+    framePrediction.grid_rowconfigure(0, minsize=height*0.1)
 
     realizar_prediccion(model, framePrediction)
+
 
 def makeAndShowGraph(model):
     x, y = model.get_columnx(), model.get_columny()
@@ -265,9 +269,10 @@ def makeAndShowGraph(model):
     plt.savefig(filename) # para guardarlo en un archivo
 
     customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 6, column = 9)
-
-    predcitionFrame(model)
     
+    predcitionFrame(model)
+
+
 if __name__ == '__main__':
 
     x = 20
@@ -297,7 +302,7 @@ if __name__ == '__main__':
     for i in range(11):
         screen.grid_rowconfigure(i, weight = 1)
     #screen.grid_rowconfigure(10, weight = 50)
-
+    
     # CREAR LOS BOTONES
     chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 5, columnspan=1)
     loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 5, columnspan=1)
@@ -305,6 +310,8 @@ if __name__ == '__main__':
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
+
+    
     
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
