@@ -3,7 +3,7 @@ from tkinter import *
 
 def makePrediction(model, frame):
     try:
-        xName = model.get_columnx_name()
+        xName = model.get_columnxName()
 
         xNameLabel = customtkinter.CTkLabel(frame, text = f"{xName}") 
         xNameLabel.grid(row = 1, column = 1, columnspan = 3, sticky = W)
@@ -30,7 +30,7 @@ def showPrediction(model, xInput, frame):
         predictionsLabel1 = customtkinter.CTkLabel(frame, text=f"{round(model.get_slope(), 2)} *")
         predictionsLabel1.grid(row = 2, column = 0, columnspan = 1)
         
-        yName = model.get_columny_name()
+        yName = model.get_columnyName()
         yNameLabel = customtkinter.CTkLabel(frame, text = f"{yName}") 
         yNameLabel.grid(row = 1, column = 4, columnspan = 5)
 
@@ -41,8 +41,8 @@ def showPrediction(model, xInput, frame):
         predictionsLabel3.grid(row = 2, column = 4, columnspan = 5)
 
 def createPredictionFrame(model, screen, height, width):
-    predictionFrame = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    predictionFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     predictionFrame.grid(row = 11, columnspan = 30)
-    predictionFrame.grid_rowconfigure(0, minsize=height*0.1)
+    predictionFrame.grid_rowconfigure(0, minsize = height*0.1)
 
     makePrediction(model, predictionFrame)

@@ -1,5 +1,5 @@
 import numpy as np
-import class_model
+import classModel
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from tkinter import *
@@ -29,4 +29,4 @@ def regression(data, xVariable, yVariable, root):
     meanSquaredError = np.mean((model.predict(xValues) - yValues)**2)
     meanSquaredError = round(meanSquaredError, 2)
     
-    return class_model.Model(intercept, slope, rSquared, meanSquaredError, selectedColumns, xValues, xName, yValues, yName, root.filename.name)
+    return classModel.Model(intercept, slope, rSquared, meanSquaredError, selectedColumns, xValues, xName, yValues, yName, root.filename.name)

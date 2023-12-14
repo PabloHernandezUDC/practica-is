@@ -1,14 +1,14 @@
 import customtkinter
 from tkinter import *
-from data_op import readFile 
-from model_op import loadModelFromPickleObject
+from dataOp import readFile 
+from modelOp import loadModelFromPickleObject
 
 def configure(root):
     screenWidth = root.winfo_screenwidth()
     screenHeight = root.winfo_screenheight()
-    root.geometry(f"{screenWidth}x{screenHeight}")  # Ajustar ventana al tamaño de la pantalla
+    root.geometry(f"{screenWidth}x{screenHeight}")  # ajustar ventana al tamaño de la pantalla
     screenFrame = customtkinter.CTkScrollableFrame(root)
-    screenFrame.pack(expand=True, fill='both')
+    screenFrame.pack(expand = True, fill = 'both')
 
     # Mostrar la ventana maximizada
     root.state('zoomed')
@@ -22,5 +22,5 @@ def configure(root):
     #screen.grid_rowconfigure(10, weight = 50)
 
     # CREAR LOS BOTONES
-    chooseFileButton = customtkinter.CTkButton(screenFrame, text = "Elegir archivo", command = lambda: readFile(screenWidth, screenHeight, root, screenFrame)).grid(row = 1, column = 5, columnspan=1)
-    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: loadModelFromPickleObject(root, screenFrame)).grid(row = 2, column = 5, columnspan=1)
+    chooseFileButton = customtkinter.CTkButton(screenFrame, text = "Elegir archivo", command = lambda: readFile(screenWidth, screenHeight, root, screenFrame)).grid(row = 1, column = 5, columnspan = 1)
+    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: loadModelFromPickleObject(root, screenFrame)).grid(row = 2, column = 5, columnspan = 1)

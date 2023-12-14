@@ -20,7 +20,7 @@ import pandas as p
 import numpy as np
 import customtkinter
 import tkinter
-import class_model
+import classModel
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
@@ -28,8 +28,7 @@ from tkinter import *
 from tkinter import PhotoImage
 from tkinter import simpledialog, filedialog
 from PIL import Image, ImageTk
-from readDB_op import createDB, readRows, readOrdered,readSQL
-import class_model
+from readDbOp import createDB, readRows, readOrdered,readSQL
 from pickle import dump, dumps, load, loads
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -59,7 +58,7 @@ def regression(data, i, j):
     meanSquaredError = np.mean((model.predict(x) - y)**2)
     meanSquaredError = round(meanSquaredError, 2)
     
-    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, name_x, y, name_y, root.filename.name)
+    modelo_obj = classModel.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, name_x, y, name_y, root.filename.name)
     return modelo_obj
 
 
@@ -202,7 +201,7 @@ def makeModel():
 def realizar_prediccion(model, frame):
 
     try:
-        namex = model.get_columnx_name()
+        namex = model.get_columnxName()
 
         x_name = customtkinter.CTkLabel(frame, text = f"{namex}") 
         x_name.grid(row = 1, column = 1, columnspan = 3, sticky = W)

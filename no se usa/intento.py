@@ -2,13 +2,12 @@ import pandas as p
 import numpy as np
 import customtkinter
 import tkinter
-import class_model
+import classModel
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from tkinter import *
 from tkinter import simpledialog, filedialog
-from readDB_op import readSQL
-import class_model
+from readDbOp import readSQL
 from pickle import dump, load
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -38,7 +37,7 @@ def regression(data, i, j, root):
     meanSquaredError = np.mean((model.predict(x) - y)**2)
     meanSquaredError = round(meanSquaredError, 2)
     
-    modelo_obj = class_model.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, name_x, y, name_y, root.filename.name)
+    modelo_obj = classModel.Model(intercept, slope, r_sq, meanSquaredError, selectedColumns, x, name_x, y, name_y, root.filename.name)
     return modelo_obj
 
 
@@ -89,18 +88,18 @@ def getColumns(data):
 
 
 def createColumns(data, screen, height, width):
-    #frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
-    frameColumnas = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    #frameColumnas = customtkinter.CTkFrame(screen,width = width*0.9, height = height*0.20, corner_radius = 10)
+    frameColumnas = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
     frameColumnas.grid(row = 5, column = 0, columnspan = 12)
-    #frameColumnas.grid(column=0,row=7,columnspan=9)
-    frameColumnas.grid_columnconfigure(0, minsize=100)
-    customtkinter.CTkLabel(frameColumnas,text="X:").grid(row=0,column=0,sticky=E)
-    customtkinter.CTkLabel(frameColumnas,text="Y:").grid(row=1,column=0,sticky=E)
-    scrollx = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
-    scrolly = customtkinter.CTkScrollableFrame(frameColumnas,orientation="horizontal",height=30,width=800)
-    scrollx.grid(row=0,column=2,sticky=E)
-    scrolly.grid(row=1,column=2,sticky=E)
+    #frameColumnas.grid(column = 0, row = 7, columnspan = 9)
+    frameColumnas.grid_columnconfigure(0, minsize = 100)
+    customtkinter.CTkLabel(frameColumnas, text = "X:").grid(row = 0, column = 0, sticky = E)
+    customtkinter.CTkLabel(frameColumnas, text = "Y:").grid(row = 1, column = 0, sticky = E)
+    scrollx = customtkinter.CTkScrollableFrame(frameColumnas, orientation = "horizontal", height = 30, width = 800)
+    scrolly = customtkinter.CTkScrollableFrame(frameColumnas, orientation = "horizontal", height = 30, width = 800)
+    scrollx.grid(row = 0, column = 2, sticky = E)
+    scrolly.grid(row = 1, column = 2, sticky = E)
     global v1
     global v2
     v1 = IntVar()
@@ -118,8 +117,8 @@ def createColumns(data, screen, height, width):
         customtkinter.CTkRadioButton(scrollx, variable = v1, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         i += 1
-    frameColumnas.grid_columnconfigure(3, minsize=width*0.2) 
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, screen, height, width)).grid(row=0,column=3,rowspan=2)
+    frameColumnas.grid_columnconfigure(3, minsize = width*0.2) 
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, screen, height, width)).grid(row = 0, column = 3, rowspan = 2)
 
 
 def leer(width, height, root, screen):
@@ -129,11 +128,11 @@ def leer(width, height, root, screen):
     filepath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
     filepath.grid(row = 1, column = 3, columnspan = 2)
     
-    frame = tkinter.Frame(screen, width = width, borderwidth=2, relief="solid")
-    frame.grid(row=1, column=1, columnspan=10, padx=10, pady=10)
+    frame = tkinter.Frame(screen, width = width, borderwidth = 2, relief = "solid")
+    frame.grid(row = 1, column = 1, columnspan = 10, padx = 10, pady = 10)
     
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
-    filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
+    filepath = customtkinter.CTkLabel(frame, text = "", wraplength = width*0.9)
     filepath.pack()
 
     # MOSTRAR LOS DATOS EN UNA TABLA
@@ -149,10 +148,10 @@ def leer(width, height, root, screen):
     for i in range(len(printableData.columns)):        
         customtkinter.CTkLabel(dataTable,
                                text = printableData.columns[i] + '\n' + printableData.iloc[:, i].to_string(index=False),
-                               justify='right',
-                               font=(None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
-                               ).grid(row=0, column=i, padx=10, sticky=W)
-        dataTable.grid_columnconfigure(i, weight=1)
+                               justify = 'right',
+                               font = (None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
+                               ).grid(row = 0, column = i, padx = 10, sticky = W)
+        dataTable.grid_columnconfigure(i, weight = 1)
     dataTable.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data, screen, height, width)
@@ -168,14 +167,14 @@ def makeModel(data, screen, height, width):
 def realizar_prediccion(model, frame):
 
     try:
-        namex = model.get_columnx_name()
+        namex = model.get_columnxName()
 
         x_name = customtkinter.CTkLabel(frame, text = f"{namex}") 
         x_name.grid(row = 1, column = 1, columnspan = 3, sticky = W)
         x_entry = customtkinter.CTkEntry(frame)
         x_entry.grid(row = 2, column = 1, columnspan = 1)
 
-        pred_button = customtkinter.CTkButton(frame, text="Realizar Predicción", command=lambda: showPrediction(model, x_entry.get(), frame))
+        pred_button = customtkinter.CTkButton(frame, text="Realizar Predicción", command = lambda: showPrediction(model, x_entry.get(), frame))
         pred_button.grid(row = 3, column = 1, columnspan = 4)
 
     except ValueError:
@@ -205,11 +204,11 @@ def showPrediction(model, x_user, frame):
         predicciones_label3.grid(row = 2, column = 4, columnspan = 5)
 
 def predcitionFrame(model, screen, height, width):
-    framePrediction = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    framePrediction = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
     framePrediction.grid(row = 11, columnspan = 30)
-    #frameColumnas.grid(column=0,row=7,columnspan=9)
-    framePrediction.grid_rowconfigure(0, minsize=height*0.1)
+    #frameColumnas.grid(column = 0, row = 7, columnspan = 9)
+    framePrediction.grid_rowconfigure(0, minsize = height*0.1)
 
     realizar_prediccion(model, framePrediction)
 
@@ -226,8 +225,8 @@ def makeAndShowGraph(model, screen, height, width):
     ax.set_title(f'y= {eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
-    frameGraph = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
-    frameGraph.grid(row = 6, columnspan=12)
+    frameGraph = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
+    frameGraph.grid(row = 6, columnspan = 12)
 
     canvas = FigureCanvasTkAgg(fig, frameGraph)
     canvas.draw()
@@ -236,7 +235,7 @@ def makeAndShowGraph(model, screen, height, width):
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    frameGraph.grid_columnconfigure(1, minsize=width*0.10)
+    frameGraph.grid_columnconfigure(1, minsize = width*0.10)
     customtkinter.CTkButton(frameGraph, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 0, column = 2)
 
     predcitionFrame(model, screen, height, width)
@@ -272,8 +271,8 @@ if __name__ == '__main__':
     #screen.grid_rowconfigure(10, weight = 50)
 
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = lambda: leer(width, height, root, screen)).grid(row = 1, column = 5, columnspan=1)
-    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = lambda: cargar_modelo(root, screen)).grid(row = 2, column = 5, columnspan=1)
+    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = lambda: leer(width, height, root, screen)).grid(row = 1, column = 5, columnspan = 1)
+    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = lambda: cargar_modelo(root, screen)).grid(row = 2, column = 5, columnspan = 1)
 
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)

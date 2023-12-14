@@ -1,6 +1,6 @@
 import customtkinter
 from tkinter import *
-from gui_op import configure
+from guiOp import configure
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL

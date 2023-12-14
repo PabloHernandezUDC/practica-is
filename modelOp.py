@@ -24,8 +24,8 @@ def makeAndShowGraph(model, screen, height, width):
     axis.set_title(f'y= {equation} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     axis.grid()
 
-    graphFrame = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
-    graphFrame.grid(row = 6, columnspan=12)
+    graphFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
+    graphFrame.grid(row = 6, columnspan = 12)
 
     graphCanvas = FigureCanvasTkAgg(figure, graphFrame)
     graphCanvas.draw()
@@ -33,7 +33,7 @@ def makeAndShowGraph(model, screen, height, width):
 
     plt.savefig('fig.png') # para guardarlo en un archivo
 
-    graphFrame.grid_columnconfigure(1, minsize=width*0.10)
+    graphFrame.grid_columnconfigure(1, minsize = width*0.10)
     customtkinter.CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model)).grid(row = 0, column = 2)
 
     createPredictionFrame(model, screen, height, width)
