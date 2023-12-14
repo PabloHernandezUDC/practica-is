@@ -30,19 +30,23 @@ class Model():
     set_columny(columny): Establece el valor de la columna y.
     get_filepath(): Obtiene el valor de la ruta del archivo.
     set_filepath(filepath): Establece el valor de la ruta del archivo.
+    predict(input_value) : Obtiene la predcción de y a partir de un valor de x.
     """
 
-    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columny, filepath, description):
+    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columnx_name, columny, columny_name, filepath, description=None):
         self.intercept = intercept
         self.slope = slope
         self.rsquare = rsquare
         self.mse = mse
         self.selectedColumns=selectedColumns
         self.columnx = columnx
+        self.columnx_name = columnx_name
         self.columny = columny
+        self.columny_name = columny_name
         self.filepath = filepath # para este parámetro habría que crear una variable en el código principal que llame a la ruta del archivo,
                                  # y luego al crear el modelo poner esa variable como este parámetro
         self.description= description
+    
     def get_intercept(self):
         return self.intercept
     
@@ -76,11 +80,17 @@ class Model():
     def get_columnx(self):
         return self.columnx
     
+    def get_columnx_name(self):
+        return self.columnx_name
+    
     def set_columnx(self, columnx):
         self.columnx = columnx
     
     def get_columny(self):
         return self.columny 
+    
+    def get_columny_name(self):
+        return self.columny_name
 
     def set_columny(self, columny):
         self.columny = columny
@@ -96,6 +106,10 @@ class Model():
     
     def set_description(self, description):
         self.description = description
+    
+    def predict(self, input_value):
+        prediction = self.intercept + self.slope * input_value
+        return prediction
 
 # Formas de mostrar el docstring
 # help(Model)

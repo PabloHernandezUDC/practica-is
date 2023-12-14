@@ -2,7 +2,6 @@ import sqlite3 as sql
 import pandas as pd
 
 
-
 def leer_sql(nombre):
 
     cnx = sql.connect(nombre)
@@ -50,13 +49,11 @@ def readRows(nombre_db):
     instruccion = "SELECT * FROM {}".format(tabla)
     cursor.execute(instruccion)
     
-    datos = cursor.fetchall() #crea una lista de tuplas con la info de la tabla
+    datos = cursor.fetchall() # crea una lista de tuplas con la info de la tabla
     
     conexion.commit()
     conexion.close()
     
-    #for fila in datos:
-        #print(fila)
     return datos
 
 def readOrdered(nombre_db, field):
@@ -68,19 +65,14 @@ def readOrdered(nombre_db, field):
     instruccion = "SELECT * FROM {} ORDER BY {}".format(tabla, field)
     cursor.execute(instruccion)
     
-    datos = cursor.fetchall() #crea una lista de tuplas con la info de la tabla
+    datos = cursor.fetchall() # crea una lista de tuplas con la info de la tabla
     
     conexion.commit()
     conexion.close()
     
-    #for fila in datos:
-    #    print(fila)
     return datos
 
 if __name__ == '__main__':
     nombre = "modelos/housing.db"
     col = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value', 'ocean_proximity']
     tabla = 'california_housing_dataset'
-   
- 
-    #readOrdered(nombre, col, tabla, 'longitude')

@@ -1,21 +1,3 @@
-# librerías a instalar:
-# numpy
-# pandas
-# openpyxl
-# matplotlib
-# scikit-learn
-# statsmodels
-# tkinter
-# customtkinter
-
-# cosas útiles:
-# -> cómo hacer la regresión lineal y mostrarla:
-#   -> https://realpython.com/linear-regression-in-python/
-#   -> https://medium.com/analytics-vidhya/simple-linear-regression-with-example-using-numpy-e7b984f0d15e
-# -> documentación de plot(): https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html
-
-
-import time
 import pandas as p
 import numpy as np
 import customtkinter
@@ -23,14 +5,11 @@ import tkinter
 import class_model
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error
 from tkinter import *
-from tkinter import PhotoImage
 from tkinter import simpledialog, filedialog
-from PIL import Image, ImageTk
-from leerBD import createDB, readRows, readOrdered,leer_sql
+from leerBD import leer_sql
 import class_model
-from pickle import dump, dumps, load, loads
+from pickle import dump, load
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
@@ -41,13 +20,13 @@ def abline(slope, intercept):
     plt.plot(x_vals, y_vals, '-r') # formato = '[marker][line][color]'
 
 
-def regression(data, i, j):
+def regression(data, i, j, root):
     plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
     selectedColumns = data.iloc[:, [i, j]]
 
     name_x = data.columns[i]
     name_y = data.columns[j]
-    
+
     x = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
     y = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
 
@@ -72,19 +51,13 @@ def guardar_modelo(obj):
         dump(obj, f)
 
 
-def cargar_modelo():
+def cargar_modelo(root, screen):
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpicked_model = load(f)
     customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", 
-                            command = lambda: makeAndShowGraph(unpicked_model)).grid(row = 6, column = 6)
+                            command = lambda: makeAndShowGraph(unpicked_model, screen)).grid(row = 6, column = 6)
 
-
-# def prediccion(modelo, x_usuario):
-#     # Realizar la predicción con el modelo
-#     y_predicho = modelo.predict(np.array([[x_usuario]]))
-
-#     return y_predicho
 
 
 def extractDataFromFile(route):
@@ -115,7 +88,7 @@ def getColumns(data):
     return l
 
 
-def createColumns(data):
+def createColumns(data, screen, height, width):
     #frameColumnas = customtkinter.CTkFrame(screen,width=width*0.9,height=height*0.20,corner_radius=10)
     frameColumnas = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
@@ -146,11 +119,10 @@ def createColumns(data):
         customtkinter.CTkRadioButton(scrolly, variable = v2, value = i, text = col).grid(row = 0, column = 1+i, sticky = W)
         i += 1
     frameColumnas.grid_columnconfigure(3, minsize=width*0.2) 
-    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = makeModel).grid(row=0,column=3,rowspan=2)
+    customtkinter.CTkButton(frameColumnas, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, screen, height, width)).grid(row=0,column=3,rowspan=2)
 
 
-def leer():
-    global data, width, height
+def leer(width, height, root, screen):
     root.filename = filedialog.askopenfile(initialdir = "modelos/")
     data = extractDataFromFile(root.filename.name)
     
@@ -163,9 +135,6 @@ def leer():
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filepath = customtkinter.CTkLabel(frame, text="", wraplength = width*0.9)
     filepath.pack()
-
-
-
 
     # MOSTRAR LOS DATOS EN UNA TABLA
     dataTable = customtkinter.CTkScrollableFrame(master = screen,
@@ -186,17 +155,14 @@ def leer():
         dataTable.grid_columnconfigure(i, weight=1)
     dataTable.grid(row = 3, column = 0, columnspan = 20)
     
-    createColumns(data)
+    createColumns(data, screen, height, width)
     filepath.configure(text = f"{root.filename.name}")
     
-def makeModel():
-    global data
-    global root 
+def makeModel(data, screen, height, width): 
     num1, num2 = int(v1.get()), int(v2.get())
 
-    model = regression(data, num1, num2)
-    makeAndShowGraph(model)
-
+    model = regression(data, num1, num2, root)
+    makeAndShowGraph(model, screen, height, width)
 
 
 def realizar_prediccion(model, frame):
@@ -238,7 +204,7 @@ def showPrediction(model, x_user, frame):
         predicciones_label3 = customtkinter.CTkLabel(frame, text = f"{round(y_predicho, 2)}")
         predicciones_label3.grid(row = 2, column = 4, columnspan = 5)
 
-def predcitionFrame(model):
+def predcitionFrame(model, screen, height, width):
     framePrediction = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
     #frameColumnas.pack()  # Empaquetar el frame dentro de la ventana
     framePrediction.grid(row = 11, columnspan = 30)
@@ -247,8 +213,7 @@ def predcitionFrame(model):
 
     realizar_prediccion(model, framePrediction)
 
-
-def makeAndShowGraph(model):
+def makeAndShowGraph(model, screen, height, width):
     x, y = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -261,18 +226,21 @@ def makeAndShowGraph(model):
     ax.set_title(f'y= {eq} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     ax.grid()
 
-    canvas = FigureCanvasTkAgg(fig, screen)
+    frameGraph = customtkinter.CTkFrame(screen, width=width*0.9, height=height*0.14)
+    frameGraph.grid(row = 6, columnspan=12)
+
+    canvas = FigureCanvasTkAgg(fig, frameGraph)
     canvas.draw()
-    canvas.get_tk_widget().grid(row = 6, column = 0, columnspan = 8)
+    canvas.get_tk_widget().grid(row = 0, column = 0)
 
     filename = 'fig.png'
     plt.savefig(filename) # para guardarlo en un archivo
 
-    customtkinter.CTkButton(screen, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 6, column = 9)
+    frameGraph.grid_columnconfigure(1, minsize=width*0.10)
+    customtkinter.CTkButton(frameGraph, text = "Guardar modelo", command = lambda: guardar_modelo(model)).grid(row = 0, column = 2)
+
+    predcitionFrame(model, screen, height, width)
     
-    predcitionFrame(model)
-
-
 if __name__ == '__main__':
 
     x = 20
@@ -302,16 +270,14 @@ if __name__ == '__main__':
     for i in range(11):
         screen.grid_rowconfigure(i, weight = 1)
     #screen.grid_rowconfigure(10, weight = 50)
-    
+
     # CREAR LOS BOTONES
-    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = leer).grid(row = 1, column = 5, columnspan=1)
-    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = cargar_modelo).grid(row = 2, column = 5, columnspan=1)
+    chooseButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = lambda: leer(width, height, root, screen)).grid(row = 1, column = 5, columnspan=1)
+    loadButton = customtkinter.CTkButton(screen, text = "Cargar modelo", command = lambda: cargar_modelo(root, screen)).grid(row = 2, column = 5, columnspan=1)
 
     #showButton = customtkinter.CTkButton(root, text = "Crear modelo y mostrar Imagen", command = makeAndShowGraph).grid(row = 2, column = 4,columnspan=2)
     #quitButton = customtkinter.CTkButton(root, text = "Quit", command = quit).grid(row = 3, column = 4,columnspan=2)
 
-
-    
     
     # EJECUTAR EL BUCLE PRINCIPAL
     root.mainloop()
