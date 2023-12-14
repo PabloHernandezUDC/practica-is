@@ -1,7 +1,7 @@
 import customtkinter
 from tkinter import *
 from data_op import readFile 
-from model_op import cargar_modelo
+from model_op import loadModelFromPickleObject
 
 def configure(root):
     screenWidth = root.winfo_screenwidth()
@@ -23,4 +23,4 @@ def configure(root):
 
     # CREAR LOS BOTONES
     chooseFileButton = customtkinter.CTkButton(screenFrame, text = "Elegir archivo", command = lambda: readFile(screenWidth, screenHeight, root, screenFrame)).grid(row = 1, column = 5, columnspan=1)
-    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: cargar_modelo(root, screenFrame)).grid(row = 2, column = 5, columnspan=1)
+    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: loadModelFromPickleObject(root, screenFrame)).grid(row = 2, column = 5, columnspan=1)

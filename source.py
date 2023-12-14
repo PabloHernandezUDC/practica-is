@@ -28,7 +28,7 @@ from tkinter import *
 from tkinter import PhotoImage
 from tkinter import simpledialog, filedialog
 from PIL import Image, ImageTk
-from leerBD import createDB, readRows, readOrdered,leer_sql
+from readDB_op import createDB, readRows, readOrdered,readSQL
 import class_model
 from pickle import dump, dumps, load, loads
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -103,7 +103,7 @@ def extractDataFromFile(route):
         elif route.endswith('.xlsx'):
             data = p.read_excel(route)
         elif route.endswith('.db'):
-            data = leer_sql(route) 
+            data = readSQL(route) 
     return data
 
 

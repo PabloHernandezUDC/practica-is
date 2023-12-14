@@ -4,7 +4,7 @@ import tkinter
 import matplotlib.pyplot as plt
 from tkinter import *
 from tkinter import filedialog
-from leerBD import leer_sql
+from readDB_op import readSQL
 from model_op import makeModel
 
 def extractDataFromFile(fileRoute):
@@ -23,7 +23,7 @@ def extractDataFromFile(fileRoute):
         elif fileRoute.endswith('.xlsx'):
             data = p.read_excel(fileRoute)
         elif fileRoute.endswith('.db'):
-            data = leer_sql(fileRoute) 
+            data = readSQL(fileRoute) 
     return data
 
 

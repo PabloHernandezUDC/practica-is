@@ -38,13 +38,15 @@ class Model():
         self.slope = slope
         self.rsquare = rsquare
         self.mse = mse
-        self.selectedColumns=selectedColumns
+        self.selectedColumns = selectedColumns
         self.columnx = columnx
         self.columnx_name = columnx_name
         self.columny = columny
         self.columny_name = columny_name
-        self.filepath = filepath # para este parámetro habría que crear una variable en el código principal que llame a la ruta del archivo,
-                                 # y luego al crear el modelo poner esa variable como este parámetro
+        # para este parámetro habría que crear una variable en el código
+        # principal que llame a la ruta del archivo, y luego al crear el modelo
+        # poner esa variable como este parámetro
+        self.filepath = filepath
         self.description= description
     
     def get_intercept(self):

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from tkinter import *
 from tkinter import simpledialog, filedialog
-from leerBD import leer_sql
+from readDB_op import readSQL
 import class_model
 from pickle import dump, load
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -76,7 +76,7 @@ def extractDataFromFile(route):
         elif route.endswith('.xlsx'):
             data = p.read_excel(route)
         elif route.endswith('.db'):
-            data = leer_sql(route) 
+            data = readSQL(route) 
     return data
 
 
