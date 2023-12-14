@@ -3,6 +3,16 @@ from tkinter import *
 
 
 def makePrediction(model, frame):
+    """Genera la interfaz de usuario para realizar una predicción.
+
+    Parameters
+    ----------
+    model: obj
+        Objeto de la clase Model utilizado para realizar la predicción.
+    frame: Tkinter.Frame
+        Marco donde se mostrarán los elementos para realizar la predicción.
+    """
+
     try:
         xName = model.get_columnxName()
 
@@ -22,6 +32,18 @@ def makePrediction(model, frame):
 
 
 def showPrediction(model, xInput, frame):
+        """Muestra el resultado de la predicción.
+
+        Parameters
+        ----------
+        model: obj
+            Objeto de la clase Model utilizado para realizar la predicción.
+        xInput: str
+            Valor de entrada para la predicción.
+        frame: Tkinter.Frame
+            Marco donde se mostrarán los elementos para realizar la predicción.
+        """
+
         # Convertir el valor ingresado por el usuario a un número
         xInput = float(xInput)
 
@@ -43,6 +65,20 @@ def showPrediction(model, xInput, frame):
 
 
 def createPredictionFrame(model, screen, height, width):
+    """Crea un marco para la interfaz de usuario de predicción.
+
+    Parameters
+    ----------
+    model: obj
+        Objeto de la clase Model utilizado para realizar la predicción.
+    screen: Tkinter.Tk
+        Ventana principal de la interfaz.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
+    """
+
     predictionFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     predictionFrame.grid(row = 11, columnspan = 30)
     predictionFrame.grid_rowconfigure(0, minsize = height*0.1)

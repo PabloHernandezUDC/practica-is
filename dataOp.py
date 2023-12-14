@@ -9,9 +9,19 @@ from modelOp import makeModel
 
 
 def extractDataFromFile(fileRoute):
-    '''
-    Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión
-    '''
+    """Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión.
+
+    Parameters
+    ----------
+    fileRoute: str
+        Ruta del archivo a procesar.
+
+    Returns
+    -------
+    data: DataFrame or None
+        DataFrame con los datos del archivo si éste es válido.
+    """
+    
     validExtensions = ('.csv', '.xlsx', '.db')
     fileRoute = str(fileRoute)
             
@@ -29,6 +39,19 @@ def extractDataFromFile(fileRoute):
 
 
 def getColumns(data):
+    """Obtiene las columnas válidas de un DataFrame.
+
+    Parameters
+    ----------
+    data: DataFrame
+        DataFrame del cual se extraen las columnas.
+    
+    Returns
+    -------
+    validColumns: list
+        Lista de nombres de las columnas válidas.
+    """
+
     validColumns =  []
     for column in data.columns:
         if data[column].dtype not in ('StringDtype', 'datetime64'): # para descartar strings y fechas
@@ -37,6 +60,22 @@ def getColumns(data):
 
 
 def createColumns(data, root, screen, height, width):
+    """Crea las columnas x e y para seleccionar en la interfaz.
+
+    Parameters
+    ----------
+    data: DataFrame
+        DataFrame del cual se obtienen las columnas.
+    root: Tk
+        Raíz de la interfaz gráfica.
+    screeen: Frame
+        Marco de la interfaz gráfica donde se mostrarán las columnas.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
+    """
+
     choosingVariablesFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     choosingVariablesFrame.grid(row = 5, column = 0, columnspan = 12)
     choosingVariablesFrame.grid_columnconfigure(0, minsize = 100)
@@ -72,6 +111,20 @@ def createColumns(data, root, screen, height, width):
 
 
 def readFile(width, height, root, screen):
+    """Lee un archivo y muestra la información en la interfaz gráfica.
+
+    Parameters
+    ----------
+    width: int
+        Ancho de la pantalla.
+    height: int
+        Altura de la pantalla.
+    root: Tk
+        Raíz de la interfaz gráfica.
+    screen: Frame
+        Marco de la interfaz gráfica donde se mostrará la información.
+    """
+
     root.filename = filedialog.askopenfile(initialdir = "modelos/")
     data = extractDataFromFile(root.filename.name)
     

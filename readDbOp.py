@@ -3,17 +3,51 @@ import pandas as pd
 
 
 def readSQL(dbName):
+    """Lee datos desde una base de datos SQLite y devuelve un DataFrame de pandas.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+
+    Returns
+    -------
+    DataFrame: pandas.DataFrame
+        DataFrame que contiene los datos extraídos de la base de datos.
+    """
+
     SQLConnection = sql.connect(dbName)
     return pd.read_sql_query("SELECT * FROM california_housing_dataset", SQLConnection)
 
 
 def createDB(dbName):
+    """Crea una base de datos vacía.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+    """
+
     SQLConnection = sql.connect(dbName)
     SQLConnection.commit()
     SQLConnection.close()
 
 
 def tableName(dbName):
+    """Obtiene el nombre de la tabla de la base de datos.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+
+    Returns
+    -------
+    table: str
+    Nombre de la tabla de la base de datos.
+    """
+
     SQLConnection = sql.connect(dbName)
     
     cursor = SQLConnection.cursor()
@@ -26,6 +60,14 @@ def tableName(dbName):
 
 
 def columnNames(dbName):
+    """Imprime los nombres de las columnas de la tabla de la base de datos.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+    """
+
     table = tableName(dbName)
     SQLConnection = sql.connect(dbName)
     
@@ -40,6 +82,19 @@ def columnNames(dbName):
 
 
 def readRows(dbName):
+    """Lee todas las filas de la tabla de la base de datos y las devuelve como una lista de tuplas.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+
+    Returns
+    -------
+    data: list
+        Lista de tuplas que contienen los datos de las filas de la tabla.
+    """
+
     table = tableName(dbName)
     SQLConnection = sql.connect(dbName)
     
@@ -54,6 +109,21 @@ def readRows(dbName):
 
 
 def readOrdered(dbName, field):
+    """Lee todas las filas de la tabla ordenadas por el campo especificado y las devuelve como una lista de tuplas.
+
+    Parameters
+    ----------
+    dbName: str
+        Nombre del archivo de la base de datos SQLite.
+    field: str
+        Campo por el que se ordenan las filas.
+    
+    Returns
+    -------
+    data: list
+        Lista de tuplas que contienen los datos de las filas de la tabla, ordenados por el campo especificado.
+    """
+
     SQLConnection = sql.connect(dbName)
     cursor = SQLConnection.cursor()
 

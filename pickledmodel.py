@@ -8,6 +8,18 @@ from pickle import dump, dumps, load, loads
 objPrueba = classModel.Model(1, 2, 3, 4, 5, 6, 7, 8) # creamos un objeto de nuestra clase modelo
 
 def serialize(obj):
+    """Serializa un objeto y lo guarda en un archivo.
+
+    Parameters
+    ----------
+    obj: obj
+        Objeto que se va a serializar.
+
+    Notes
+    -----
+    Este método interactúa con la interfaz de usuario para seleccionar la ubicación y el nombre del archivo
+    donde se guardará el objeto serializado.
+    """
 
     fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
 

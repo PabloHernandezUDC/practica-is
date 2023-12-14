@@ -4,6 +4,14 @@ from dataOp import readFile
 from modelOp import loadModelFromPickleObject
 
 def configure(root):
+    """Configura la interfaz gráfica para la aplicación de regresión lineal.
+
+    Parameters
+    ----------
+    root: Tk
+        Raíz de la interfaz gráfica.
+    """
+
     screenWidth = root.winfo_screenwidth()
     screenHeight = root.winfo_screenheight()
     root.geometry(f"{screenWidth}x{screenHeight}")  # ajustar ventana al tamaño de la pantalla

@@ -5,6 +5,16 @@ from sklearn.linear_model import LinearRegression
 from tkinter import *
 
 def plotLine(slope, intercept):
+    """Genera una gráfica de línea a partir de la pendiente y el término independiente.
+
+    Parameters
+    ----------
+    slope: float
+        Pendiente de la línea.
+    intercept: float
+        Término independiente de la línea.
+    """
+
     axes = plt.gca() 
     xValues = np.array(axes.get_xlim())
     yValues = intercept + slope * xValues
@@ -12,6 +22,25 @@ def plotLine(slope, intercept):
 
 
 def regression(data, xVariable, yVariable, root):
+    """Realiza una regresión lineal y devuelve un objeto de la clase Model.
+
+    Parameters
+    ----------
+    data: pandas.DataFrame
+        Conjunto de datos a partir del cuál se realiza la regresión.
+    xVariable: int
+        Indice de la columna x de los datos.
+    yVariable: int
+        Indice de la columna y de los datos.
+    root: tkinter.Tk
+        Objeto raíz de la interfaz gráfica.
+
+    Returns
+    -------
+    Model: classModel.Model
+        Objeto de la clase Model con los resultados de la regresión.
+    """
+
     plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
     selectedColumns = data.iloc[:, [xVariable, yVariable]]
 

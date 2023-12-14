@@ -8,11 +8,45 @@ from regression import plotLine, regression
 from prediction import createPredictionFrame
 
 
-def makeModel(data, root, screen, height, width, v1, v2): 
+def makeModel(data, root, screen, height, width, v1, v2):
+    """Genera y muestra el gráfico del modelo.
+
+    Parameters
+    ----------
+    data: pandas.DataFrame
+        Datos utilizados para generar el modelo.
+    root: Tkinter.Tk
+        Raíz de la interfaz gráfica.
+    screen: Tkinter.Frame
+        Marco de la interfaz donde se mostrará la gráfica.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
+    v1: Tkinter.IntVar
+        Variable asociada a la variable x seleccionada.
+    v2: TkinterIntVar
+        Variable asociada a la variable y seleccionada.
+    """
+
     makeAndShowGraph(regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
 
 
 def makeAndShowGraph(model, screen, height, width):
+    """Genera y muestra un gráfico basado en el modelo proporcionado.
+
+    Parameters
+    ----------
+    model: Model
+        Modelo generado a partir de los datos.
+    screen: Tkinter.Frame
+        Marco de la interfaz donde se mostrará la gráfica.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
+    """
+
     xColumn, yColumn = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -41,6 +75,14 @@ def makeAndShowGraph(model, screen, height, width):
 
 
 def saveModelToPickleObject(obj):
+    """Guarda el modelo serializado en un archivo.
+
+    Parameters
+    ----------
+    obj: obj
+        El objeto del modelo que se va a guardar.
+    """
+
     modelDescription = simpledialog.askstring("Input", "Añade una descripción al modelo:")
     obj.set_description(modelDescription)
     fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
@@ -50,6 +92,16 @@ def saveModelToPickleObject(obj):
 
 
 def loadModelFromPickleObject(root, screen):
+    """Carga un modelo serializado desde un archivo.
+
+    Parameters
+    ----------
+    root: Tkinter.Tk
+        Raíz de la interfaz gráfica.
+    screen: Tkinter.Frame
+        Marco de la interfaz donde se mostrará el modelo y la imagen.
+    """
+
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpickedModel = load(f)
