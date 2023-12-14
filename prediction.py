@@ -1,6 +1,7 @@
 import customtkinter
 from tkinter import *
 
+
 def makePrediction(model, frame):
     try:
         xName = model.get_columnxName()
@@ -11,7 +12,7 @@ def makePrediction(model, frame):
         xEntryField = customtkinter.CTkEntry(frame)
         xEntryField.grid(row = 2, column = 1, columnspan = 1)
 
-        predictButton = customtkinter.CTkButton(frame, text="Realizar Predicción", command=lambda: showPrediction(model, xEntryField.get(), frame))
+        predictButton = customtkinter.CTkButton(frame, text="Realizar Predicción", command = lambda: showPrediction(model, xEntryField.get(), frame))
         predictButton.grid(row = 3, column = 1, columnspan = 4)
 
     except ValueError:
@@ -39,6 +40,7 @@ def showPrediction(model, xInput, frame):
 
         predictionsLabel3 = customtkinter.CTkLabel(frame, text = f"{round(yPredicted, 2)}")
         predictionsLabel3.grid(row = 2, column = 4, columnspan = 5)
+
 
 def createPredictionFrame(model, screen, height, width):
     predictionFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)

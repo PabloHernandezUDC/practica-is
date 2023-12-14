@@ -7,6 +7,7 @@ from tkinter import filedialog
 from readDbOp import readSQL
 from modelOp import makeModel
 
+
 def extractDataFromFile(fileRoute):
     '''
     Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión
@@ -39,12 +40,16 @@ def createColumns(data, root, screen, height, width):
     choosingVariablesFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
     choosingVariablesFrame.grid(row = 5, column = 0, columnspan = 12)
     choosingVariablesFrame.grid_columnconfigure(0, minsize = 100)
+
     customtkinter.CTkLabel(choosingVariablesFrame, text = "X:").grid(row = 0, column = 0, sticky = E)
     customtkinter.CTkLabel(choosingVariablesFrame, text = "Y:").grid(row = 1, column = 0, sticky = E)
+
     xVariableScrollableFrame = customtkinter.CTkScrollableFrame(choosingVariablesFrame, orientation = "horizontal", height = 30, width = 800)
     yVariableScrollableFrame = customtkinter.CTkScrollableFrame(choosingVariablesFrame, orientation = "horizontal", height = 30, width = 800)
+
     xVariableScrollableFrame.grid(row = 0, column = 2, sticky = E)
     yVariableScrollableFrame.grid(row = 1, column = 2, sticky = E)
+    
     global v1
     global v2
     v1 = IntVar()
@@ -61,6 +66,7 @@ def createColumns(data, root, screen, height, width):
         customtkinter.CTkRadioButton(xVariableScrollableFrame, variable = v1, value = i, text = column).grid(row = 0, column = 1+i, sticky = W)
         customtkinter.CTkRadioButton(yVariableScrollableFrame, variable = v2, value = i, text = column).grid(row = 0, column = 1+i, sticky = W)
         i += 1
+    
     choosingVariablesFrame.grid_columnconfigure(3, minsize = width*0.2) 
     customtkinter.CTkButton(choosingVariablesFrame, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, root, screen, height, width, v1, v2)).grid(row = 0, column = 3, rowspan = 2)
 
@@ -86,7 +92,6 @@ def readFile(width, height, root, screen):
                                                  corner_radius = 10,
                                                  orientation = 'horizontal')
 
-
     numericData = data.select_dtypes(include = ['int16', 'int32', 'int64', 'float16', 'float32', 'float64']).head()
     
     for i in range(len(numericData.columns)):        
@@ -95,7 +100,7 @@ def readFile(width, height, root, screen):
                                justify = 'right',
                                font = (None, 20) # le ponemos None a la fuente para que ponga la "por defecto"
                                ).grid(row = 0, column = i, padx = 10, sticky = W)
-        dataTableScrollableFrame.grid_columnconfigure(i, weight=1)
+        dataTableScrollableFrame.grid_columnconfigure(i, weight = 1)
     dataTableScrollableFrame.grid(row = 3, column = 0, columnspan = 20)
     
     createColumns(data, root, screen, height, width)

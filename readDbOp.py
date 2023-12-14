@@ -1,14 +1,17 @@
 import sqlite3 as sql
 import pandas as pd
 
+
 def readSQL(dbName):
     SQLConnection = sql.connect(dbName)
     return pd.read_sql_query("SELECT * FROM california_housing_dataset", SQLConnection)
+
 
 def createDB(dbName):
     SQLConnection = sql.connect(dbName)
     SQLConnection.commit()
     SQLConnection.close()
+
 
 def tableName(dbName):
     SQLConnection = sql.connect(dbName)
@@ -20,6 +23,7 @@ def tableName(dbName):
     SQLConnection.close()
 
     return table
+
 
 def columnNames(dbName):
     table = tableName(dbName)
@@ -34,6 +38,7 @@ def columnNames(dbName):
 
     SQLConnection.close()
 
+
 def readRows(dbName):
     table = tableName(dbName)
     SQLConnection = sql.connect(dbName)
@@ -46,6 +51,7 @@ def readRows(dbName):
     SQLConnection.close()
     
     return data
+
 
 def readOrdered(dbName, field):
     SQLConnection = sql.connect(dbName)
@@ -61,6 +67,7 @@ def readOrdered(dbName, field):
     SQLConnection.close()
     
     return data
+
 
 if __name__ == '__main__':
     name = "modelos/housing.db"

@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from regression import plotLine, regression
 from prediction import createPredictionFrame
 
+
 def makeModel(data, root, screen, height, width, v1, v2): 
     makeAndShowGraph(regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
 
