@@ -91,7 +91,7 @@ def saveModelToPickleObject(obj):
         dump(obj, f)
 
 
-def loadModelFromPickleObject(root, screen):
+def loadModelFromPickleObject(root, screen, height, width):
     """Carga un modelo serializado desde un archivo.
 
     Parameters
@@ -106,4 +106,4 @@ def loadModelFromPickleObject(root, screen):
     with open(root.filename.name, "rb") as f:
         unpickedModel = load(f)
     customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", 
-                            command = lambda: makeAndShowGraph(unpickedModel, screen)).grid(row = 6, column = 6)
+                            command = lambda: makeAndShowGraph(unpickedModel, screen, height, width)).grid(row = 6, column = 6)

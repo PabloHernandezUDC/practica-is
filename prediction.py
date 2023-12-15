@@ -2,7 +2,7 @@ import customtkinter
 from tkinter import *
 
 
-def makePrediction(model, frame):
+def showPrediction(model, frame):
     """Genera la interfaz de usuario para realizar una predicción.
 
     Parameters
@@ -22,7 +22,7 @@ def makePrediction(model, frame):
         xEntryField = customtkinter.CTkEntry(frame)
         xEntryField.grid(row = 2, column = 1, columnspan = 1)
 
-        predictButton = customtkinter.CTkButton(frame, text="Realizar Predicción", command = lambda: showPrediction(model, xEntryField.get(), frame))
+        predictButton = customtkinter.CTkButton(frame, text="Realizar Predicción", command = lambda: makePrediction(model, xEntryField.get(), frame))
         predictButton.grid(row = 3, column = 1, columnspan = 4)
 
     except ValueError:
@@ -31,7 +31,7 @@ def makePrediction(model, frame):
                                foreground = "red").grid(row = 3, column = 2, columnspan = 8)
 
 
-def showPrediction(model, xInput, frame):
+def makePrediction(model, xInput, frame):
         """Muestra el resultado de la predicción.
 
         Parameters
@@ -83,4 +83,4 @@ def createPredictionFrame(model, screen, height, width):
     predictionFrame.grid(row = 11, columnspan = 30)
     predictionFrame.grid_rowconfigure(0, minsize = height*0.1)
 
-    makePrediction(model, predictionFrame)
+    showPrediction(model, predictionFrame)

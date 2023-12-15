@@ -30,4 +30,4 @@ def configure(root):
 
     # CREAR LOS BOTONES
     chooseFileButton = customtkinter.CTkButton(screenFrame, text = "Elegir archivo", command = lambda: readFile(screenWidth, screenHeight, root, screenFrame)).grid(row = 1, column = 5, columnspan = 1)
-    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: loadModelFromPickleObject(root, screenFrame)).grid(row = 2, column = 5, columnspan = 1)
+    loadModelButton = customtkinter.CTkButton(screenFrame, text = "Cargar modelo", command = lambda: loadModelFromPickleObject(root, screenFrame, screenHeight, screenWidth)).grid(row = 2, column = 5, columnspan = 1)
