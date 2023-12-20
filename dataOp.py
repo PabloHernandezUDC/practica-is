@@ -128,13 +128,14 @@ def readFile(width, height, root, screen):
     root.filename = filedialog.askopenfile(initialdir = "modelos/")
     data = extractDataFromFile(root.filename.name)
     
-    filePath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
+    filePath = customtkinter.CTkLabel(screen, text = "Ruta:", wraplength = width*0.9)
     filePath.grid(row = 1, column = 4, sticky=E)
 
     chooseFileButton = customtkinter.CTkButton(screen, text = "Elegir archivo", command = lambda: readFile(width, height, root, screen)).grid(row = 1, column = 5,sticky=E)
     
     fileRouteFrame = tkinter.Frame(screen, width = width, borderwidth = 2, relief = "solid")
-    fileRouteFrame.grid(row = 1, column = 5, padx = 10, pady = 10,sticky=W)
+    fileRouteFrame.grid(row = 1, column = 5, padx = 10, pady = 10, sticky = W)
+    
     # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
     filePath = customtkinter.CTkLabel(fileRouteFrame, text="", wraplength = width*0.9)
     filePath.pack()

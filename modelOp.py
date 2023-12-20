@@ -71,6 +71,9 @@ def makeAndShowGraph(model, screen, height, width):
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
     customtkinter.CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model)).grid(row = 0, column = 2)
 
+    description_label = customtkinter.CTkLabel(graphFrame, text = f'Descripción del modelo: {model.get_description()}')
+    description_label.grid(row = 1, column = 0)
+
     createPredictionFrame(model, screen, height, width)
 
 
