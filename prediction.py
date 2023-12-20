@@ -1,5 +1,5 @@
 import customtkinter
-from tkinter import *
+from tkinter import W
 
 
 def showPrediction(model, frame):
