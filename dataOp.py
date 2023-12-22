@@ -201,7 +201,8 @@ def loadModelFromPickleObject(root, screen, height, width):
     filePath = CTkLabel(screen, text = root.filename.name)
     filePath.grid(row = 1, column = 4)
 
-
+    xName = unpickedModel.get_columnxName()
+    yName = unpickedModel.get_columnyName()
     slope = unpickedModel.get_slope()
     intercept = unpickedModel.get_intercept()
     squareR = unpickedModel.get_rsquare()
@@ -211,17 +212,23 @@ def loadModelFromPickleObject(root, screen, height, width):
     modelFrame.grid(row = 4, columnspan = 30)
     modelFrame.grid_rowconfigure(0, minsize = height*0.1)
 
+    xNameLabel = CTkLabel(modelFrame, text = f"x: {xName}")
+    xNameLabel.grid(row = 1, column = 5)
+
+    yNameLabel = CTkLabel(modelFrame, text = f"y: {yName}")
+    yNameLabel.grid(row = 2, column = 5)
+
     equationLabel = CTkLabel(modelFrame, text = f"y = {round(slope, 2)} x + {round(intercept, 2)}") 
-    equationLabel.grid(row = 1, column = 4, columnspan = 5)
+    equationLabel.grid(row = 3, column = 4, columnspan = 5)
 
     rSquareLabel = CTkLabel(modelFrame, text = f" R^2 : {squareR}   MSE : {mse}")
-    rSquareLabel.grid(row = 2, column = 5)
+    rSquareLabel.grid(row = 4, column = 5)
 
     #mseLabel = CTkLabel(modelFrame, text = f" MSE: {mse}")
     #mseLabel.grid(row = 2, column = 5, columnspan = 1)
 
-    descriptionLabel = CTkLabel(modelFrame, text = f'Descripción del modelo: {unpickedModel.get_description()}')
-    descriptionLabel.grid(row = 3, column = 5)
+    descriptionLabel = CTkLabel(modelFrame, text = f'Descripción: {unpickedModel.get_description()}')
+    descriptionLabel.grid(row = 5, column = 5)
 
     createPredictionFrame(unpickedModel, screen, height, width)
 
