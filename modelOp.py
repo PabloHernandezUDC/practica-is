@@ -103,9 +103,40 @@ def loadModelFromPickleObject(root, screen, height, width):
         Marco de la interfaz donde se mostrará el modelo y la imagen.
     """
 
+
+
+    def clear_frame(screen):
+        for widgets in screen.winfo_children():
+            widgets.destroy()
+
+
+    clear_frame(screen)
+
+    chooseFileButton = CTkButton(screen,
+                                               text = "Elegir archivo",
+                                               command = lambda: readFile(width,
+                                                                          height,
+                                                                          root,
+                                                                          screen)).grid(row = 1,
+                                                                                             column = 5)
+    loadModelButton = CTkButton(screen,
+                                              text = "Cargar modelo",
+                                              command = lambda: loadModelFromPickleObject(root,
+                                                                                          screen,
+                                                                                          height,
+                                                                                          width)).grid(row = 2,
+                                                                                                             column = 5)
+    
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpickedModel = load(f)
+    routeText = CTkLabel(screen, text="Ruta:")
+    routeText.grid(row = 1, column = 3)
+    
+    # CREAR UNA ETIQUETA PARA MOSTRAR LA RUTA DEL ARCHIVO
+    filePath = CTkLabel(screen, text = root.filename.name)
+    filePath.grid(row = 1, column = 4)
+
 
     slope = unpickedModel.get_slope()
     intercept = unpickedModel.get_intercept()
