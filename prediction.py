@@ -25,6 +25,18 @@ def showPrediction(model, frame):
         predictButton = customtkinter.CTkButton(frame, text="Realizar Predicción", command = lambda: makePrediction(model, xEntryField.get(), frame))
         predictButton.grid(row = 3, column = 1, columnspan = 4)
 
+        # Mostrar la predicción en la interfaz
+        predictionsLabel1 = customtkinter.CTkLabel(frame, text=f"{round(model.get_slope(), 2)} *")
+        predictionsLabel1.grid(row = 2, column = 0, columnspan = 1)
+        
+        yName = model.get_columnyName()
+        yNameLabel = customtkinter.CTkLabel(frame, text = f"{yName}") 
+        yNameLabel.grid(row = 1, column = 4, columnspan = 5)
+
+        predictionsLabel2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_intercept(), 2)}  =")
+        predictionsLabel2.grid(row = 2, column = 2, columnspan = 2)
+
+    
     except ValueError:
         # Manejar el caso en que el usuario ingrese un valor no válido
         customtkinter.CTkLabel(frame, text = "Error: Ingresa un valor numérico válido para x", 
@@ -50,16 +62,6 @@ def makePrediction(model, xInput, frame):
         yPredicted = model.predict(xInput)
 
         # Mostrar la predicción en la interfaz
-        predictionsLabel1 = customtkinter.CTkLabel(frame, text=f"{round(model.get_slope(), 2)} *")
-        predictionsLabel1.grid(row = 2, column = 0, columnspan = 1)
-        
-        yName = model.get_columnyName()
-        yNameLabel = customtkinter.CTkLabel(frame, text = f"{yName}") 
-        yNameLabel.grid(row = 1, column = 4, columnspan = 5)
-
-        predictionsLabel2 = customtkinter.CTkLabel(frame, text = f"+ {round(model.get_intercept(), 2)}  =")
-        predictionsLabel2.grid(row = 2, column = 2, columnspan = 2)
-
         predictionsLabel3 = customtkinter.CTkLabel(frame, text = f"{round(yPredicted, 2)}")
         predictionsLabel3.grid(row = 2, column = 4, columnspan = 5)
 
