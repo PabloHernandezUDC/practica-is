@@ -125,7 +125,12 @@ def readFile(width, height, root, screen):
         Marco de la interfaz gráfica donde se mostrará la información.
     """
 
-    root.filename = filedialog.askopenfile(initialdir = "modelos/")
+    tiposArchivo = (
+    ("Archivos CSV", "*.csv"),
+    ("Archivos de base de datos", "*.db"),
+    ("Archivos Excel", "*.xlsx")
+    )
+    root.filename = filedialog.askopenfile(initialdir = "modelos/", filetypes = tiposArchivo)
     data = extractDataFromFile(root.filename.name)
     
     filePath = customtkinter.CTkLabel(screen, text="Ruta:", wraplength = width*0.9)
