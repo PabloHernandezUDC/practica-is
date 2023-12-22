@@ -1,9 +1,10 @@
-import customtkinter
 import matplotlib.pyplot as plt
-from tkinter import *
-from tkinter import simpledialog, filedialog
-from pickle import dump, load
+
+from tkinter import simpledialog, filedialog, E
+from customtkinter import CTkButton, CTkFrame, CTkLabel
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pickle import dump, load
+
 from regression import plotLine, regression
 from prediction import createPredictionFrame
 
@@ -59,7 +60,7 @@ def makeAndShowGraph(model, screen, height, width):
     axis.set_title(f'y= {equation} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     axis.grid()
 
-    graphFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)
+    graphFrame = CTkFrame(screen, width = width*0.9, height = height*0.14)
     graphFrame.grid(row = 6, columnspan = 12)
 
     graphCanvas = FigureCanvasTkAgg(figure, graphFrame)
@@ -69,7 +70,7 @@ def makeAndShowGraph(model, screen, height, width):
     plt.savefig('fig.png') # para guardarlo en un archivo
 
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    customtkinter.CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model)).grid(row = 0, column = 2)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model)).grid(row = 0, column = 2)
 
     createPredictionFrame(model, screen, height, width)
 
@@ -90,20 +91,3 @@ def saveModelToPickleObject(obj):
     with open(fileName, "wb") as f:
         dump(obj, f)
 
-
-def loadModelFromPickleObject(root, screen, height, width):
-    """Carga un modelo serializado desde un archivo.
-
-    Parameters
-    ----------
-    root: Tkinter.Tk
-        Raíz de la interfaz gráfica.
-    screen: Tkinter.Frame
-        Marco de la interfaz donde se mostrará el modelo y la imagen.
-    """
-
-    root.filename = filedialog.askopenfile(initialdir="modelos/")
-    with open(root.filename.name, "rb") as f:
-        unpickedModel = load(f)
-    customtkinter.CTkButton(screen, text = "Mostrar Modelo e Imagen", 
-                            command = lambda: makeAndShowGraph(unpickedModel, screen, height, width)).grid(row = 6, column = 6)

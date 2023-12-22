@@ -1,8 +1,9 @@
 import numpy as np
-import classModel
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
-from tkinter import *
+
+import classModel
+
 
 def plotLine(slope, intercept):
     """Genera una gráfica de línea a partir de la pendiente y el término independiente.
