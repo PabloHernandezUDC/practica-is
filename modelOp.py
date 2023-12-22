@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
-from tkinter import simpledialog, filedialog
-from customtkinter import CTkButton, CTkFrame
+from tkinter import simpledialog, filedialog, E
+from customtkinter import CTkButton, CTkFrame, CTkLabel
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump, load
 
@@ -106,5 +106,28 @@ def loadModelFromPickleObject(root, screen, height, width):
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
         unpickedModel = load(f)
-    CTkButton(screen, text = "Mostrar Modelo e Imagen", 
-                            command = lambda: makeAndShowGraph(unpickedModel, screen, height, width)).grid(row = 6, column = 6)
+
+    slope = unpickedModel.get_slope()
+    intercept = unpickedModel.get_intercept()
+    squareR = unpickedModel.get_rsquare()
+    mse = unpickedModel.get_mse()
+
+    modelFrame = CTkFrame(screen, width = width*0.9, height = height*0.14)
+    modelFrame.grid(row = 4, columnspan = 30)
+    modelFrame.grid_rowconfigure(0, minsize = height*0.1)
+
+    equationLabel = CTkLabel(modelFrame, text = f"y = {round(slope, 2)} x + {round(intercept, 2)}") 
+    equationLabel.grid(row = 1, column = 4, columnspan = 5)
+
+    rSquareLabel = CTkLabel(modelFrame, text = f" R^2 : {squareR}   MSE : {mse}")
+    rSquareLabel.grid(row = 2, column = 5)
+
+    #mseLabel = CTkLabel(modelFrame, text = f" MSE: {mse}")
+    #mseLabel.grid(row = 2, column = 5, columnspan = 1)
+
+    descriptionLabel = CTkLabel(modelFrame, text = f'Descripción del modelo: {unpickedModel.get_description()}')
+    descriptionLabel.grid(row = 3, column = 5)
+
+    createPredictionFrame(unpickedModel, screen, height, width)
+
+    #CTkButton(screen, text = "Mostrar Modelo e Imagen", command = lambda: cositas(screen, unpickedModel)).grid(row = 6, column = 6)
