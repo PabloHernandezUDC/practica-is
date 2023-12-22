@@ -4,7 +4,7 @@ from tkinter import simpledialog, filedialog, E
 from customtkinter import CTkButton, CTkFrame, CTkLabel
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump, load
-
+from dataOp import readFile 
 from regression import plotLine, regression
 from prediction import createPredictionFrame
 
