@@ -1,7 +1,7 @@
 from customtkinter import CTkButton, CTkScrollableFrame
 
-from dataOp import readFile 
-from modelOp import loadModelFromPickleObject
+from dataOp import readFile, loadModelFromPickleObject
+
 
 def configure(root):
     """Configura la interfaz gráfica para la aplicación de regresión lineal.
