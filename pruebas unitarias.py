@@ -1,6 +1,7 @@
-from prediction import makePrediction
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
+
+from prediction import makePrediction
 
 
 class TestMakePrediction(unittest.TestCase):

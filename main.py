@@ -1,10 +1,10 @@
-import customtkinter
-from tkinter import *
+from customtkinter import CTk
 from guiOp import configure
+
 
 if __name__ == '__main__':
     # CREAR LA VENTANA PRINCIPAL
-    root = customtkinter.CTk()
+    root = CTk()
     configure(root)
 
     # EJECUTAR EL BUCLE PRINCIPAL
