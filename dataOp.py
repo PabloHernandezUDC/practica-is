@@ -2,10 +2,10 @@ import pandas
 from tkinter import *
 from tkinter import filedialog
 from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkRadioButton, CTkScrollableFrame
-
+from pickle import load
 from readDbOp import readSQL
 from modelOp import makeModel
-
+from prediction import createPredictionFrame
 
 def extractDataFromFile(fileRoute):
     """Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión.
