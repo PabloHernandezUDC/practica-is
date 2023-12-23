@@ -94,20 +94,3 @@ def saveModelToPickleObject(obj):
     with open(fileName, "wb") as f:
         dump(obj, f)
 
-
-def loadModelFromPickleObject(root, screen, height, width):
-    """Carga un modelo serializado desde un archivo.
-
-    Parameters
-    ----------
-    root: Tkinter.Tk
-        Raíz de la interfaz gráfica.
-    screen: Tkinter.Frame
-        Marco de la interfaz donde se mostrará el modelo y la imagen.
-    """
-
-    root.filename = filedialog.askopenfile(initialdir="modelos/")
-    with open(root.filename.name, "rb") as f:
-        unpickedModel = load(f)
-    CTkButton(screen, text = "Mostrar Modelo e Imagen", 
-                            command = lambda: makeAndShowGraph(unpickedModel, screen, height, width)).grid(row = 6, column = 6)
