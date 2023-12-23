@@ -41,5 +41,5 @@ def configure(root):
                                               command = lambda: loadModelFromPickleObject(root,
                                                                                           screenFrame,
                                                                                           screenHeight,
-                                                                                          screenWidth)).grid(row = 2,
-                                                                                                             column = 5)
+                                                                                          screenWidth)).grid(row = 1,
+                                                                                                             column = 6)

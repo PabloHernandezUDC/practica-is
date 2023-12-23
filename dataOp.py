@@ -172,12 +172,9 @@ def loadModelFromPickleObject(root, screen, height, width):
         Marco de la interfaz donde se mostrará el modelo y la imagen.
     """
 
-
-
     def clear_frame(screen):
         for widgets in screen.winfo_children():
             widgets.destroy()
-
 
     clear_frame(screen)
 
@@ -193,8 +190,8 @@ def loadModelFromPickleObject(root, screen, height, width):
                                               command = lambda: loadModelFromPickleObject(root,
                                                                                           screen,
                                                                                           height,
-                                                                                          width)).grid(row = 2,
-                                                                                                             column = 5)
+                                                                                          width)).grid(row = 1,
+                                                                                                             column = 6)
     
     root.filename = filedialog.askopenfile(initialdir="modelos/")
     with open(root.filename.name, "rb") as f:
@@ -229,13 +226,7 @@ def loadModelFromPickleObject(root, screen, height, width):
     rSquareLabel = CTkLabel(modelFrame, text = f" R^2 : {squareR}   MSE : {mse}")
     rSquareLabel.grid(row = 4, column = 5)
 
-    #mseLabel = CTkLabel(modelFrame, text = f" MSE: {mse}")
-    #mseLabel.grid(row = 2, column = 5, columnspan = 1)
-
     descriptionLabel = CTkLabel(modelFrame, text = f'Descripción: {unpickedModel.get_description()}')
     descriptionLabel.grid(row = 5, column = 5)
 
     createPredictionFrame(unpickedModel, screen, height, width)
-
-    #CTkButton(screen, text = "Mostrar Modelo e Imagen", command = lambda: cositas(screen, unpickedModel)).grid(row = 6, column = 6)
-
