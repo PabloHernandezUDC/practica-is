@@ -7,6 +7,22 @@ from readDbOp import readSQL
 from modelOp import makeModel, createPredictionFrame
 from pickle import load
 
+
+def clearFrame(screen):
+    '''Esta función quita todos lo widgets de la pantalla
+
+    Parameters
+    ----------
+    screen: Tknter screen
+        Pantalla a limpiar
+
+    Returns
+    -------
+        None
+    '''
+    for widgets in screen.winfo_children():
+        widgets.destroy()
+
 def extractDataFromFile(fileRoute):
     """Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión.
 
@@ -151,6 +167,25 @@ def readFile(width, height, root, screen, name):
     name: str
         Nombre del archivo seleccionado.
     """
+
+
+
+    clearFrame(screen)
+
+    chooseFileButton = CTkButton(screen,
+                                               text = "Elegir archivo",
+                                               command = lambda: obtainFileForRead(width,
+                                                                          height,
+                                                                          root,
+                                                                          screen)).grid(row = 1,
+                                                                                             column = 5)
+    loadModelButton = CTkButton(screen,
+                                              text = "Cargar modelo",
+                                              command = lambda: obtainFileForLoad(root,
+                                                                                screen,
+                                                                                height,
+                                                                                width)).grid(row = 2,
+                                                                                                    column = 5)
     data = extractDataFromFile(name)
     routeText = CTkLabel(screen, text="Ruta:")
     routeText.grid(row = 1, column = 3)
@@ -215,11 +250,10 @@ def loadModelFromPickleObject(root, screen, height, width, name):
         Nombre del archivo seleccionado.
     """
 
-    def clear_frame(screen):
-        for widgets in screen.winfo_children():
-            widgets.destroy()
 
-    clear_frame(screen)
+
+
+    clearFrame(screen)
 
     chooseFileButton = CTkButton(screen,
                                                text = "Elegir archivo",
