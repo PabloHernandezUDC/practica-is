@@ -70,7 +70,7 @@ def makeAndShowGraph(model, screen, height, width):
     plt.savefig('fig.png') # para guardarlo en un archivo
 
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: triggerSave(model,screen)).grid(row = 0, column = 2)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: triggerSave(model,graphFrame)).grid(row = 3, column = 2)
 
     createPredictionFrame(model, screen, height, width)
 
@@ -88,8 +88,8 @@ def triggerSave(obj,screen):
     modelDescription = CTkEntry(screen)
     modelDescription.bind('<Return>',lambda event:(saveModelToPickleObject(obj)))
     text = CTkLabel(screen,text="Añade una descripción:")
-    text.grid(row=1,column=6)
-    modelDescription.grid(row = 2, column = 6, columnspan = 1)
+    text.grid(row=1,column=2)
+    modelDescription.grid(row = 2, column = 2, columnspan = 1)
     obj.set_description(modelDescription)
 
     def saveModelToPickleObject(obj):
