@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 from tkinter import simpledialog, filedialog, E
-from customtkinter import CTkButton, CTkFrame, CTkLabel
+from customtkinter import CTkButton, CTkFrame, CTkLabel,CTkEntry
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump
 
@@ -70,24 +70,38 @@ def makeAndShowGraph(model, screen, height, width):
     plt.savefig('fig.png') # para guardarlo en un archivo
 
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model)).grid(row = 0, column = 2)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: triggerSave(model,screen)).grid(row = 0, column = 2)
 
     createPredictionFrame(model, screen, height, width)
 
 
-def saveModelToPickleObject(obj):
-    """Guarda el modelo serializado en un archivo.
-
+def triggerSave(obj,screen):
+    """Llama a la función saveModelToPickeObject
     Parameters
     ----------
     obj: obj
-        El objeto del modelo que se va a guardar.
+            El objeto del modelo que se va a guardar.
+    Screen: screen
+        La pantalla sobre la que se van a poner los widgets
+    
     """
-
-    modelDescription = simpledialog.askstring("Input", "Añade una descripción al modelo:")
+    modelDescription = CTkEntry(screen)
+    modelDescription.bind('<Return>',lambda event:(saveModelToPickleObject(obj)))
+    text = CTkLabel(screen,text="Añade una descripción:")
+    text.grid(row=1,column=6)
+    modelDescription.grid(row = 2, column = 6, columnspan = 1)
     obj.set_description(modelDescription)
-    fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
-    # Serializar el objeto y guardarlo en el archivo
-    with open(fileName, "wb") as f:
-        dump(obj, f)
+
+    def saveModelToPickleObject(obj):
+        """Guarda el modelo serializado en un archivo.
+
+        Parameters
+        ----------
+        obj: obj
+            El objeto del modelo que se va a guardar.
+        """
+        fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
+        # Serializar el objeto y guardarlo en el archivo
+        with open(fileName, "wb") as f:
+            dump(obj, f)
 
