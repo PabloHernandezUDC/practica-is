@@ -86,13 +86,13 @@ def triggerSave(obj,screen):
     
     """
     modelDescription = CTkEntry(screen)
-    modelDescription.bind('<Return>',lambda event:(saveModelToPickleObject(obj)))
+    modelDescription.bind('<Return>',lambda event:(saveModelToPickleObject(obj,modelDescription.get())))
+    modelDescription.grid(row = 2, column = 2, columnspan = 1)
     text = CTkLabel(screen,text="Añade una descripción:")
     text.grid(row=1,column=2)
-    modelDescription.grid(row = 2, column = 2, columnspan = 1)
-    obj.set_description(modelDescription)
+    
 
-    def saveModelToPickleObject(obj):
+    def saveModelToPickleObject(obj,modelDescription):
         """Guarda el modelo serializado en un archivo.
 
         Parameters
@@ -100,6 +100,7 @@ def triggerSave(obj,screen):
         obj: obj
             El objeto del modelo que se va a guardar.
         """
+        obj.set_description(modelDescription)
         fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
         # Serializar el objeto y guardarlo en el archivo
         with open(fileName, "wb") as f:
