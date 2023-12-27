@@ -1,6 +1,6 @@
 from customtkinter import CTkButton, CTkScrollableFrame
 
-from dataOp import readFile, loadModelFromPickleObject
+from dataOp import obtainFileForRead, obtainFileForLoad
 
 
 def configure(root):
@@ -31,15 +31,15 @@ def configure(root):
     # CREAR LOS BOTONES
     chooseFileButton = CTkButton(screenFrame,
                                                text = "Elegir archivo",
-                                               command = lambda: readFile(screenWidth,
+                                               command = lambda: obtainFileForRead(screenWidth,
                                                                           screenHeight,
                                                                           root,
                                                                           screenFrame)).grid(row = 1,
                                                                                              column = 5)
     loadModelButton = CTkButton(screenFrame,
                                               text = "Cargar modelo",
-                                              command = lambda: loadModelFromPickleObject(root,
-                                                                                          screenFrame,
-                                                                                          screenHeight,
-                                                                                          screenWidth)).grid(row = 2,
-                                                                                                             column = 5)
+                                              command = lambda: obtainFileForLoad(root,
+                                                                                screenFrame,
+                                                                                screenHeight,
+                                                                                screenWidth)).grid(row = 2,
+                                                                                                    column = 5)

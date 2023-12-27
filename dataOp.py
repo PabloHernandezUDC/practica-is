@@ -4,7 +4,7 @@ from tkinter import filedialog
 from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkRadioButton, CTkScrollableFrame
 
 from readDbOp import readSQL
-from modelOp import makeModel,createPredictionFrame
+from modelOp import makeModel, createPredictionFrame
 from pickle import load
 
 def extractDataFromFile(fileRoute):
@@ -109,9 +109,9 @@ def createColumns(data, root, screen, height, width):
     CTkButton(choosingVariablesFrame, text = "Crear modelo y mostrar Imagen", command = lambda: makeModel(data, root, screen, height, width, v1, v2)).grid(row = 0, column = 3, rowspan = 2)
 
 
-def readFile(width, height, root, screen):
-    """Lee un archivo y muestra la información en la interfaz gráfica.
-
+def obtainFileForRead(width, height, root, screen):
+    """Obtiene el nombre del archivo elegido por el usuario mediante una ventana de diálogo.
+    
     Parameters
     ----------
     width: int
@@ -130,8 +130,28 @@ def readFile(width, height, root, screen):
     ("Archivos Excel", "*.xlsx")
     )
     root.filename = filedialog.askopenfile(initialdir = "modelos/", filetypes = tiposArchivo)
-    data = extractDataFromFile(root.filename.name)
+    file = root.filename.name
+
+    readFile(width, height, root, screen, file)
     
+
+def readFile(width, height, root, screen, name):
+    """Lee un archivo y muestra la información en la interfaz gráfica.
+
+    Parameters
+    ----------
+    width: int
+        Ancho de la pantalla.
+    height: int
+        Altura de la pantalla.
+    root: Tk
+        Raíz de la interfaz gráfica.
+    screen: Frame
+        Marco de la interfaz gráfica donde se mostrará la información.
+    name: str
+        Nombre del archivo seleccionado.
+    """
+    data = extractDataFromFile(name)
     routeText = CTkLabel(screen, text="Ruta:")
     routeText.grid(row = 1, column = 3)
     
@@ -161,7 +181,28 @@ def readFile(width, height, root, screen):
     filePath.configure(text = f"{root.filename.name}")
 
 
-def loadModelFromPickleObject(root, screen, height, width):
+def obtainFileForLoad(root, screen, height, width):
+    """Obtiene el nombre del archivo elegido por el usuario mediante una ventana de diálogo.
+    
+    Parameters
+    ----------
+    root: Tk
+        Raíz de la interfaz gráfica.
+    screen: Frame
+        Marco de la interfaz gráfica donde se mostrará la información.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
+    """
+
+    root.filename = filedialog.askopenfile(initialdir="modelos/")
+    file = root.filename.name
+    
+    loadModelFromPickleObject(root, screen, height, width, file)
+
+
+def loadModelFromPickleObject(root, screen, height, width, name):
     """Carga un modelo serializado desde un archivo.
 
     Parameters
@@ -170,9 +211,9 @@ def loadModelFromPickleObject(root, screen, height, width):
         Raíz de la interfaz gráfica.
     screen: Tkinter.Frame
         Marco de la interfaz donde se mostrará el modelo y la imagen.
+    name: str
+        Nombre del archivo seleccionado.
     """
-
-
 
     def clear_frame(screen):
         for widgets in screen.winfo_children():
@@ -183,22 +224,22 @@ def loadModelFromPickleObject(root, screen, height, width):
 
     chooseFileButton = CTkButton(screen,
                                                text = "Elegir archivo",
-                                               command = lambda: readFile(width,
+                                               command = lambda: obtainFileForRead(width,
                                                                           height,
                                                                           root,
                                                                           screen)).grid(row = 1,
                                                                                              column = 5)
     loadModelButton = CTkButton(screen,
                                               text = "Cargar modelo",
-                                              command = lambda: loadModelFromPickleObject(root,
-                                                                                          screen,
-                                                                                          height,
-                                                                                          width)).grid(row = 2,
-                                                                                                             column = 5)
+                                              command = lambda: obtainFileForLoad(root,
+                                                                                screen,
+                                                                                height,
+                                                                                width)).grid(row = 2,
+                                                                                                    column = 5)
     
-    root.filename = filedialog.askopenfile(initialdir="modelos/")
-    with open(root.filename.name, "rb") as f:
+    with open(name, "rb") as f:
         unpickedModel = load(f)
+
     routeText = CTkLabel(screen, text="Ruta:")
     routeText.grid(row = 1, column = 3)
     
