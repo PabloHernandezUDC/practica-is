@@ -90,9 +90,13 @@ def chooseFileNameSaveModel(object, modelDescription):
     modelDescription: str
         Descripción del modelo que se va a guardar.
     """
-    fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
-    saveModelToPickleObject(object, modelDescription, fileName)
-
+    while True:
+        try:
+            fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
+            saveModelToPickleObject(object, modelDescription, fileName)
+            break
+        except FileNotFoundError:
+            print('Por favor, introduce un nombre para el archivo archivo.')
 
 def saveModelToPickleObject(obj, modelDescription, name):
     """Guarda el modelo serializado en un archivo.

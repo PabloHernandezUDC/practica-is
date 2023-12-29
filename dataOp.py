@@ -234,8 +234,13 @@ def obtainFileForLoad(root, screen, height, width):
         Ancho de la pantalla.
     """
 
-    root.filename = filedialog.askopenfile(initialdir = "modelos/")
-    file = root.filename.name
+    while True:
+        try:
+            root.filename = filedialog.askopenfile(initialdir = "modelos/")
+            file = root.filename.name
+            break
+        except AttributeError:
+            print('Por favor, elige un archivo.')
     
     loadModelFromPickleObject(root, screen, height, width, file)
 
