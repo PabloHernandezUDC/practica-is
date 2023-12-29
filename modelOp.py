@@ -6,7 +6,7 @@ from customtkinter import CTkButton, CTkFrame, CTkLabel,CTkEntry
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump
 
-from regression import linearRegression
+from regression import SimpleLinearRegression
 from prediction import createPredictionFrame
 
 
@@ -17,9 +17,9 @@ def makeModel(data, root, screen, height, width, v1, v2):
     ----------
     data: pandas.DataFrame
         Datos utilizados para generar el modelo
-    root: Tkinter.Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
-    screen: Tkinter.Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz donde se mostrará la gráfica
     height: int
         Altura de la pantalla
@@ -30,7 +30,7 @@ def makeModel(data, root, screen, height, width, v1, v2):
     v2: Tkinter.IntVar
         Variable asociada a la variable y seleccionada
     """
-    aux = linearRegression()
+    aux = SimpleLinearRegression()
     makeAndShowGraph(aux.regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
 
 
@@ -41,7 +41,7 @@ def makeAndShowGraph(model, screen, height, width):
     ----------
     model: classModel.Model
         Modelo generado a partir de los datos
-    screen: Tkinter.Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz donde se mostrará la gráfica
     height: int
         Altura de la pantalla
@@ -49,7 +49,7 @@ def makeAndShowGraph(model, screen, height, width):
         Ancho de la pantalla
     """
 
-    aux = linearRegression()
+    aux = SimpleLinearRegression()
     xColumn, yColumn = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -96,12 +96,12 @@ def chooseFileNameSaveModel(object, modelDescription):
     saveModelToPickleObject(object, modelDescription, fileName)
 
 
-def saveModelToPickleObject(obj, modelDescription, name):
+def saveModelToPickleObject(object, modelDescription, name):
     """Guarda el modelo serializado en un archivo.
 
     Parameters
     ----------
-    obj: obj
+    object: obj
         El objeto del modelo que se va a guardar
     modelDescription: str
          Descripción del modelo que se va a guardar
@@ -109,8 +109,8 @@ def saveModelToPickleObject(obj, modelDescription, name):
         Nombre del archivo que se va a guardar
     """
 
-    obj.set_description(modelDescription)
+    object.set_description(modelDescription)
 
     # Serializar el objeto y guardarlo en el archivo
     with open(name, "wb") as f:
-        dump(obj, f)
+        dump(object, f)

@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 import classModel
 
 
-class RegressionTemplate(ABC):
+class RegressionTemplate(ABC): # clase que funciona como plantilla de regresiones lineales
 
     def plotLine(self, slope, intercept):
         """Genera una gráfica de línea a partir de la pendiente y el término independiente.
@@ -72,9 +72,21 @@ class RegressionTemplate(ABC):
                                 yValues, modelData['yName'], root.filename.name)
 
 
-class linearRegression(RegressionTemplate):
+class SimpleLinearRegression(RegressionTemplate): # subclase de RegressionTemplate() que se centra en las regresiones lineales simples
 
     def processData(self, selectedColumns):
+        """Procesa las columnas seleccionadas.
+
+        Parameters
+        ----------
+        selectedColumns: pandas.DataFrame
+            DataFrame que contiene las columnas seleccionadas
+        
+        Returns
+        -------
+        Diccionario con los nombres de las columnas seleccionadas y sus respectivos datos.
+        """
+
         xValues = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
         yValues = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
 

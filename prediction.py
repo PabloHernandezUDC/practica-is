@@ -9,7 +9,7 @@ def showPrediction(model, frame):
     ----------
     model: classModel.Model
         Objeto de la clase Model utilizado para realizar la predicción
-    frame: Tkinter.Frame
+    frame: customtkinter.CTkFrame
         Marco donde se mostrarán los elementos para realizar la predicción
     """
 
@@ -51,7 +51,7 @@ def makePrediction(model, xInput, frame):
         Objeto de la clase Model utilizado para realizar la predicción
     xInput: str
         Valor de entrada para la predicción
-    frame: Tkinter.Frame
+    frame: customtkinter.CTkFrame
         Marco donde se mostrarán los elementos para realizar la predicción
     """
 
@@ -72,7 +72,7 @@ def createPredictionFrame(model, screen, height, width):
     ----------
     model: classModel.Model
         Objeto de la clase Model utilizado para realizar la predicción
-    screen: Tkinter.Tk
+    screen: customtkinter.CTkFrame
         Ventana principal de la interfaz
     height: int
         Altura de la pantalla

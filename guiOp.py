@@ -8,7 +8,7 @@ def configure(root):
 
     Parameters
     ----------
-    root: Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
     """
 

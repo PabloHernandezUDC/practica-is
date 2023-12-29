@@ -101,9 +101,9 @@ def createColumns(data, root, screen, height, width):
     ----------
     data: pandas.DataFrame
         DataFrame del cual se obtienen las columnas
-    root: Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
-    screen: Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz gráfica donde se mostrarán las columnas
     height: int
         Altura de la pantalla
@@ -154,9 +154,9 @@ def obtainFileForRead(width, height, root, screen):
         Ancho de la pantalla
     height: int
         Altura de la pantalla
-    root: Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
-    screen: Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz gráfica donde se mostrará la información
     """
 
@@ -180,9 +180,9 @@ def readFile(width, height, root, screen, name):
         Ancho de la pantalla
     height: int
         Altura de la pantalla
-    root: Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
-    screen: Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz gráfica donde se mostrará la información
     name: str
         Nombre del archivo seleccionado
@@ -226,7 +226,7 @@ def obtainFileForLoad(root, screen, height, width):
     
     Parameters
     ----------
-    root: Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
     screen: customtkinter.CTkFrame
         Marco de la interfaz gráfica donde se mostrará la información
@@ -247,9 +247,9 @@ def loadModelFromPickleObject(root, screen, height, width, name):
 
     Parameters
     ----------
-    root: Tkinter.Tk
+    root: tkinter.Tk
         Raíz de la interfaz gráfica
-    screen: Tkinter.Frame
+    screen: customtkinter.CTkFrame
         Marco de la interfaz donde se mostrará el modelo y la imagen
     height: int
         Altura de la pantalla
