@@ -9,22 +9,23 @@ from pickle import load
 
 
 def clearFrame(screen):
-    '''Esta función quita todos lo widgets de la pantalla
+    '''Quita todos los widgets de la pantalla.
 
     Parameters
     ----------
-    screen: Tknter screen
-        Pantalla a limpiar
+    screen: Tkinter screen
+        Pantalla a limpiar.
 
     Returns
     -------
-        None
+    None
     '''
     for widgets in screen.winfo_children():
         widgets.destroy()
 
+
 def extractDataFromFile(fileRoute):
-    """Esta función se ocupa de sacar los datos según el tipo de archivo, que se deduce de la extensión.
+    """Saca los datos según el tipo de archivo, que se deduce de la extensión.
 
     Parameters
     ----------
@@ -168,8 +169,6 @@ def readFile(width, height, root, screen, name):
         Nombre del archivo seleccionado.
     """
 
-
-
     clearFrame(screen)
 
     chooseFileButton = CTkButton(screen,
@@ -231,7 +230,7 @@ def obtainFileForLoad(root, screen, height, width):
         Ancho de la pantalla.
     """
 
-    root.filename = filedialog.askopenfile(initialdir="modelos/")
+    root.filename = filedialog.askopenfile(initialdir = "modelos/")
     file = root.filename.name
     
     loadModelFromPickleObject(root, screen, height, width, file)
@@ -246,12 +245,13 @@ def loadModelFromPickleObject(root, screen, height, width, name):
         Raíz de la interfaz gráfica.
     screen: Tkinter.Frame
         Marco de la interfaz donde se mostrará el modelo y la imagen.
+    height: int
+        Altura de la pantalla.
+    width: int
+        Ancho de la pantalla.
     name: str
         Nombre del archivo seleccionado.
     """
-
-
-
 
     clearFrame(screen)
 

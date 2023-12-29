@@ -75,34 +75,37 @@ def makeAndShowGraph(model, screen, height, width):
     createPredictionFrame(model, screen, height, width)
 
 
-def triggerSave(obj,screen):
-    """Llama a la función saveModelToPickeObject
+def triggerSave(obj, screen):
+    """Llama a la función saveModelToPickeObject.
+    
     Parameters
     ----------
     obj: obj
             El objeto del modelo que se va a guardar.
     Screen: screen
-        La pantalla sobre la que se van a poner los widgets
-    
+        La pantalla sobre la que se van a poner los widgets.
     """
+
     modelDescription = CTkEntry(screen)
-    modelDescription.bind('<Return>',lambda event:(saveModelToPickleObject(obj,modelDescription.get())))
+    modelDescription.bind('<Return>', lambda event:(saveModelToPickleObject(obj, modelDescription.get())))
     modelDescription.grid(row = 2, column = 2, columnspan = 1)
-    text = CTkLabel(screen,text="Añade una descripción:")
-    text.grid(row=1,column=2)
+    text = CTkLabel(screen,text = "Añade una descripción:")
+    text.grid(row = 1, column = 2)
     
 
-    def saveModelToPickleObject(obj,modelDescription):
+    def saveModelToPickleObject(obj, modelDescription):
         """Guarda el modelo serializado en un archivo.
 
         Parameters
         ----------
         obj: obj
             El objeto del modelo que se va a guardar.
+        modelDescription: str
+            Descripción del modelo que se va a guardar.
         """
+
         obj.set_description(modelDescription)
         fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
         # Serializar el objeto y guardarlo en el archivo
         with open(fileName, "wb") as f:
             dump(obj, f)
-
