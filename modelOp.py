@@ -75,12 +75,12 @@ def makeAndShowGraph(model, screen, height, width):
     modelDescription = CTkEntry(graphFrame)
     modelDescription.grid(row=4,column=2, sticky = N)
     
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: chooseFileNameSave(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: chooseFileNameSaveModel(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
 
     createPredictionFrame(model, screen, height, width)
 
 
-def chooseFileNameSave(object, modelDescription):
+def chooseFileNameSaveModel(object, modelDescription):
     """Abre una ventana de diálogo para que el usuario elija la ruta y nombre del archivo.
 
     Parameters
