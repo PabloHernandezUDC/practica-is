@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 from tkinter import simpledialog, filedialog, E
+from tkinter import *
 from customtkinter import CTkButton, CTkFrame, CTkLabel,CTkEntry
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump
@@ -65,36 +66,19 @@ def makeAndShowGraph(model, screen, height, width):
 
     graphCanvas = FigureCanvasTkAgg(figure, graphFrame)
     graphCanvas.draw()
-    graphCanvas.get_tk_widget().grid(row = 0, column = 0)
+    graphCanvas.get_tk_widget().grid(row = 0, column = 0, rowspan = 9)
 
     plt.savefig('fig.png') # para guardarlo en un archivo
 
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    text = CTkLabel(graphFrame,text = "Añade una descripción:").grid(row=1,column=2)
+    text = CTkLabel(graphFrame,text = "Añade una descripción:").grid(row=3,column=2, sticky = S)
     modelDescription = CTkEntry(graphFrame)
-    modelDescription.grid(row=2,column=2)
+    modelDescription.grid(row=4,column=2, sticky = N)
     
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model,modelDescription.get())).grid(row = 3, column = 2)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
 
     createPredictionFrame(model, screen, height, width)
 
-
-def triggerSave(obj, screen):
-    """Llama a la función saveModelToPickeObject.
-    
-    Parameters
-    ----------
-    obj: obj
-            El objeto del modelo que se va a guardar.
-    Screen: screen
-        La pantalla sobre la que se van a poner los widgets.
-    """
-
-    modelDescription = CTkEntry(screen)
-    modelDescription.bind('<Return>', lambda event:(saveModelToPickleObject(obj, modelDescription.get())))
-    modelDescription.grid(row = 2, column = 2, columnspan = 1)
-    text = CTkLabel(screen,text = "Añade una descripción:")
-    text.grid(row = 1, column = 2)
     
 
 def saveModelToPickleObject(obj, modelDescription):
