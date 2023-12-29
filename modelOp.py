@@ -70,7 +70,11 @@ def makeAndShowGraph(model, screen, height, width):
     plt.savefig('fig.png') # para guardarlo en un archivo
 
     graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: triggerSave(model,graphFrame)).grid(row = 3, column = 2)
+    text = CTkLabel(graphFrame,text = "Añade una descripción:").grid(row=1,column=2)
+    modelDescription = CTkEntry(graphFrame)
+    modelDescription.grid(row=2,column=2)
+    
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model,modelDescription.get())).grid(row = 3, column = 2)
 
     createPredictionFrame(model, screen, height, width)
 
@@ -93,19 +97,19 @@ def triggerSave(obj, screen):
     text.grid(row = 1, column = 2)
     
 
-    def saveModelToPickleObject(obj, modelDescription):
-        """Guarda el modelo serializado en un archivo.
+def saveModelToPickleObject(obj, modelDescription):
+    """Guarda el modelo serializado en un archivo.
 
-        Parameters
-        ----------
-        obj: obj
-            El objeto del modelo que se va a guardar.
-        modelDescription: str
-            Descripción del modelo que se va a guardar.
+    Parameters
+    ----------
+    obj: obj
+        El objeto del modelo que se va a guardar.
+    modelDescription: str
+         Descripción del modelo que se va a guardar.
         """
 
-        obj.set_description(modelDescription)
-        fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
-        # Serializar el objeto y guardarlo en el archivo
-        with open(fileName, "wb") as f:
-            dump(obj, f)
+    obj.set_description(modelDescription)
+    fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
+    # Serializar el objeto y guardarlo en el archivo
+    with open(fileName, "wb") as f:
+        dump(obj, f)
