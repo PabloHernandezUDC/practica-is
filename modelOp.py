@@ -75,13 +75,26 @@ def makeAndShowGraph(model, screen, height, width):
     modelDescription = CTkEntry(graphFrame)
     modelDescription.grid(row=4,column=2, sticky = N)
     
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: saveModelToPickleObject(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
+    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: chooseFileNameSave(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
 
     createPredictionFrame(model, screen, height, width)
 
-    
 
-def saveModelToPickleObject(obj, modelDescription):
+def chooseFileNameSave(object, modelDescription):
+    """Abre una ventana de diálogo para que el usuario elija la ruta y nombre del archivo.
+
+    Parameters
+    ----------
+    object: obj
+        El modelo que se va a guardar.
+    modelDescription: str
+        Descripción del modelo que se va a guardar.
+    """
+    fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
+    saveModelToPickleObject(object, modelDescription, fileName)
+
+
+def saveModelToPickleObject(obj, modelDescription, name):
     """Guarda el modelo serializado en un archivo.
 
     Parameters
@@ -90,12 +103,13 @@ def saveModelToPickleObject(obj, modelDescription):
         El objeto del modelo que se va a guardar.
     modelDescription: str
          Descripción del modelo que se va a guardar.
+    name: str
+        Nombre del archivo que se va a guardar.
         """
 
     obj.set_description(modelDescription)
-    fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
     # Serializar el objeto y guardarlo en el archivo
-    with open(fileName, "wb") as f:
+    with open(name, "wb") as f:
         dump(obj, f)
 
 
