@@ -29,6 +29,7 @@ def configure(root):
         screenFrame.grid_rowconfigure(i, weight = 1)
 
     # CREAR LOS BOTONES
+
     chooseFileButton = CTkButton(screenFrame,
                                                text = "Elegir archivo",
                                                command = lambda: obtainFileForRead(screenWidth,
@@ -43,3 +44,7 @@ def configure(root):
                                                                                 screenHeight,
                                                                                 screenWidth)).grid(row = 1,
                                                                                                     column = 6)
+
+    def clearScreen():
+        clearAndInitButtons(screenFrame, screenHeight, screenWidth, root)
+

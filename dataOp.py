@@ -1,14 +1,13 @@
 import pandas
 from tkinter import *
 from tkinter import filedialog
-from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkRadioButton, CTkScrollableFrame
 from pickle import load
+from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkRadioButton, CTkScrollableFrame
 from readDbOp import readSQL
 from modelOp import makeModel, createPredictionFrame
-from pickle import load
 
 
-def clearFrame(screen):
+def clearAndInitButtons(screen, height, width, root):
     '''Quita todos los widgets de la pantalla.
 
     Parameters
@@ -22,6 +21,23 @@ def clearFrame(screen):
     '''
     for widgets in screen.winfo_children():
         widgets.destroy()
+    
+    chooseFileButton = CTkButton(screen,
+                                               text = "Elegir archivo",
+                                               command = lambda: obtainFileForRead(width,
+                                                                          height,
+                                                                          root,
+                                                                          screen)).grid(row = 1,
+                                                                                             column = 5)
+    loadModelButton = CTkButton(screen,
+                                              text = "Cargar modelo",
+                                              command = lambda: obtainFileForLoad(root,
+                                                                                screen,
+                                                                                height,
+                                                                                width)).grid(row = 1,
+                                                                                                    column = 6)
+
+
 
 
 def extractDataFromFile(fileRoute):
@@ -141,11 +157,11 @@ def obtainFileForRead(width, height, root, screen):
         Marco de la interfaz gráfica donde se mostrará la información.
     """
 
-    tiposArchivo = (
+    tiposArchivo = [
     ("Archivos CSV", "*.csv"),
     ("Archivos de base de datos", "*.db"),
     ("Archivos Excel", "*.xlsx")
-    )
+    ]
     root.filename = filedialog.askopenfile(initialdir = "modelos/", filetypes = tiposArchivo)
     file = root.filename.name
 
@@ -168,23 +184,11 @@ def readFile(width, height, root, screen, name):
     name: str
         Nombre del archivo seleccionado.
     """
+    print(name)
+    #clearScreen()
+    clearAndInitButtons(screen,height,width,root)
 
-    clearFrame(screen)
-
-    chooseFileButton = CTkButton(screen,
-                                               text = "Elegir archivo",
-                                               command = lambda: obtainFileForRead(width,
-                                                                          height,
-                                                                          root,
-                                                                          screen)).grid(row = 1,
-                                                                                             column = 5)
-    loadModelButton = CTkButton(screen,
-                                              text = "Cargar modelo",
-                                              command = lambda: obtainFileForLoad(root,
-                                                                                screen,
-                                                                                height,
-                                                                                width)).grid(row = 1,
-                                                                                                    column = 6)
+    
     data = extractDataFromFile(name)
     routeText = CTkLabel(screen, text="Ruta:")
     routeText.grid(row = 1, column = 3)
@@ -235,7 +239,6 @@ def obtainFileForLoad(root, screen, height, width):
     
     loadModelFromPickleObject(root, screen, height, width, file)
 
-
 def loadModelFromPickleObject(root, screen, height, width, name):
     """Carga un modelo serializado desde un archivo.
 
@@ -253,22 +256,22 @@ def loadModelFromPickleObject(root, screen, height, width, name):
         Nombre del archivo seleccionado.
     """
 
-    clearFrame(screen)
+    clearAndInitButtons(screen, height, width, root)
 
-    chooseFileButton = CTkButton(screen,
-                                               text = "Elegir archivo",
-                                               command = lambda: obtainFileForRead(width,
-                                                                          height,
-                                                                          root,
-                                                                          screen)).grid(row = 1,
-                                                                                             column = 5)
-    loadModelButton = CTkButton(screen,
-                                              text = "Cargar modelo",
-                                              command = lambda: obtainFileForLoad(root,
-                                                                                screen,
-                                                                                height,
-                                                                                width)).grid(row = 1,
-                                                                                                    column = 6)
+    # chooseFileButton = CTkButton(screen,
+    #                                            text = "Elegir archivo",
+    #                                            command = lambda: obtainFileForRead(width,
+    #                                                                       height,
+    #                                                                       root,
+    #                                                                       screen)).grid(row = 1,
+    #                                                                                          column = 5)
+    # loadModelButton = CTkButton(screen,
+    #                                           text = "Cargar modelo",
+    #                                           command = lambda: obtainFileForLoad(root,
+    #                                                                             screen,
+    #                                                                             height,
+    #                                                                             width)).grid(row = 1,
+    #                                                                                                 column = 6)
     
     with open(name, "rb") as f:
         unpickedModel = load(f)
@@ -307,3 +310,5 @@ def loadModelFromPickleObject(root, screen, height, width, name):
     descriptionLabel.grid(row = 5, column = 5)
 
     createPredictionFrame(unpickedModel, screen, height, width)
+
+
