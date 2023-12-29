@@ -183,8 +183,8 @@ def readFile(width, height, root, screen, name):
                                               command = lambda: obtainFileForLoad(root,
                                                                                 screen,
                                                                                 height,
-                                                                                width)).grid(row = 2,
-                                                                                                    column = 5)
+                                                                                width)).grid(row = 1,
+                                                                                                    column = 6)
     data = extractDataFromFile(name)
     routeText = CTkLabel(screen, text="Ruta:")
     routeText.grid(row = 1, column = 3)
@@ -267,8 +267,8 @@ def loadModelFromPickleObject(root, screen, height, width, name):
                                               command = lambda: obtainFileForLoad(root,
                                                                                 screen,
                                                                                 height,
-                                                                                width)).grid(row = 2,
-                                                                                                    column = 5)
+                                                                                width)).grid(row = 1,
+                                                                                                    column = 6)
     
     with open(name, "rb") as f:
         unpickedModel = load(f)
