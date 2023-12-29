@@ -1,8 +1,10 @@
 import pandas
+
 from tkinter import *
 from tkinter import filedialog
 from pickle import load
 from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkRadioButton, CTkScrollableFrame
+
 from readDbOp import readSQL
 from modelOp import makeModel, createPredictionFrame
 
@@ -12,13 +14,14 @@ def clearAndInitButtons(screen, height, width, root):
 
     Parameters
     ----------
-    screen: Tkinter screen
-        Pantalla a limpiar.
+    screen: customtkinter.CTkFrame
+        Pantalla a limpiar
 
     Returns
     -------
     None
     '''
+    
     for widgets in screen.winfo_children():
         widgets.destroy()
     
@@ -46,12 +49,12 @@ def extractDataFromFile(fileRoute):
     Parameters
     ----------
     fileRoute: str
-        Ruta del archivo a procesar.
+        Ruta del archivo a procesar
 
     Returns
     -------
-    data: DataFrame or None
-        DataFrame con los datos del archivo si éste es válido.
+    data: pandas.DataFrame or None
+        DataFrame con los datos del archivo si éste es válido
     """
     
     validExtensions = ('.csv', '.xlsx', '.db')
@@ -75,13 +78,13 @@ def getColumns(data):
 
     Parameters
     ----------
-    data: DataFrame
-        DataFrame del cual se extraen las columnas.
+    data: pandas.DataFrame
+        DataFrame del cual se extraen las columnas
     
     Returns
     -------
     validColumns: list
-        Lista de nombres de las columnas válidas.
+        Lista de nombres de las columnas válidas
     """
 
     validColumns =  []
@@ -96,16 +99,16 @@ def createColumns(data, root, screen, height, width):
 
     Parameters
     ----------
-    data: DataFrame
-        DataFrame del cual se obtienen las columnas.
+    data: pandas.DataFrame
+        DataFrame del cual se obtienen las columnas
     root: Tk
-        Raíz de la interfaz gráfica.
-    screeen: Frame
-        Marco de la interfaz gráfica donde se mostrarán las columnas.
+        Raíz de la interfaz gráfica
+    screen: Frame
+        Marco de la interfaz gráfica donde se mostrarán las columnas
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     """
 
     choosingVariablesFrame = CTkFrame(screen, width = width*0.9, height = height*0.14)
@@ -148,13 +151,13 @@ def obtainFileForRead(width, height, root, screen):
     Parameters
     ----------
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     root: Tk
-        Raíz de la interfaz gráfica.
+        Raíz de la interfaz gráfica
     screen: Frame
-        Marco de la interfaz gráfica donde se mostrará la información.
+        Marco de la interfaz gráfica donde se mostrará la información
     """
 
     tiposArchivo = [
@@ -174,20 +177,19 @@ def readFile(width, height, root, screen, name):
     Parameters
     ----------
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     root: Tk
-        Raíz de la interfaz gráfica.
+        Raíz de la interfaz gráfica
     screen: Frame
-        Marco de la interfaz gráfica donde se mostrará la información.
+        Marco de la interfaz gráfica donde se mostrará la información
     name: str
-        Nombre del archivo seleccionado.
+        Nombre del archivo seleccionado
     """
-    print(name)
-    #clearScreen()
-    clearAndInitButtons(screen,height,width,root)
 
+    print(name)
+    clearAndInitButtons(screen,height,width,root)
     
     data = extractDataFromFile(name)
     routeText = CTkLabel(screen, text="Ruta:")
@@ -225,13 +227,13 @@ def obtainFileForLoad(root, screen, height, width):
     Parameters
     ----------
     root: Tk
-        Raíz de la interfaz gráfica.
-    screen: Frame
-        Marco de la interfaz gráfica donde se mostrará la información.
+        Raíz de la interfaz gráfica
+    screen: customtkinter.CTkFrame
+        Marco de la interfaz gráfica donde se mostrará la información
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     """
 
     root.filename = filedialog.askopenfile(initialdir = "modelos/")
@@ -239,40 +241,26 @@ def obtainFileForLoad(root, screen, height, width):
     
     loadModelFromPickleObject(root, screen, height, width, file)
 
+
 def loadModelFromPickleObject(root, screen, height, width, name):
     """Carga un modelo serializado desde un archivo.
 
     Parameters
     ----------
     root: Tkinter.Tk
-        Raíz de la interfaz gráfica.
+        Raíz de la interfaz gráfica
     screen: Tkinter.Frame
-        Marco de la interfaz donde se mostrará el modelo y la imagen.
+        Marco de la interfaz donde se mostrará el modelo y la imagen
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     name: str
-        Nombre del archivo seleccionado.
+        Nombre del archivo seleccionado
     """
 
     clearAndInitButtons(screen, height, width, root)
 
-    # chooseFileButton = CTkButton(screen,
-    #                                            text = "Elegir archivo",
-    #                                            command = lambda: obtainFileForRead(width,
-    #                                                                       height,
-    #                                                                       root,
-    #                                                                       screen)).grid(row = 1,
-    #                                                                                          column = 5)
-    # loadModelButton = CTkButton(screen,
-    #                                           text = "Cargar modelo",
-    #                                           command = lambda: obtainFileForLoad(root,
-    #                                                                             screen,
-    #                                                                             height,
-    #                                                                             width)).grid(row = 1,
-    #                                                                                                 column = 6)
-    
     with open(name, "rb") as f:
         unpickedModel = load(f)
 
@@ -310,5 +298,3 @@ def loadModelFromPickleObject(root, screen, height, width, name):
     descriptionLabel.grid(row = 5, column = 5)
 
     createPredictionFrame(unpickedModel, screen, height, width)
-
-

@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 
-from tkinter import simpledialog, filedialog, E
 from tkinter import *
+from tkinter import filedialog
 from customtkinter import CTkButton, CTkFrame, CTkLabel,CTkEntry
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump
 
-from regression import plotLine, regression
+from regression import linearRegression
 from prediction import createPredictionFrame
 
 
@@ -16,22 +16,22 @@ def makeModel(data, root, screen, height, width, v1, v2):
     Parameters
     ----------
     data: pandas.DataFrame
-        Datos utilizados para generar el modelo.
+        Datos utilizados para generar el modelo
     root: Tkinter.Tk
-        Raíz de la interfaz gráfica.
+        Raíz de la interfaz gráfica
     screen: Tkinter.Frame
-        Marco de la interfaz donde se mostrará la gráfica.
+        Marco de la interfaz donde se mostrará la gráfica
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     v1: Tkinter.IntVar
-        Variable asociada a la variable x seleccionada.
-    v2: TkinterIntVar
-        Variable asociada a la variable y seleccionada.
+        Variable asociada a la variable x seleccionada
+    v2: Tkinter.IntVar
+        Variable asociada a la variable y seleccionada
     """
-
-    makeAndShowGraph(regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
+    aux = linearRegression()
+    makeAndShowGraph(aux.regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
 
 
 def makeAndShowGraph(model, screen, height, width):
@@ -39,16 +39,17 @@ def makeAndShowGraph(model, screen, height, width):
 
     Parameters
     ----------
-    model: Model
-        Modelo generado a partir de los datos.
+    model: classModel.Model
+        Modelo generado a partir de los datos
     screen: Tkinter.Frame
-        Marco de la interfaz donde se mostrará la gráfica.
+        Marco de la interfaz donde se mostrará la gráfica
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     """
 
+    aux = linearRegression()
     xColumn, yColumn = model.get_columnx(), model.get_columny()
     selectedColumns = model.get_selectedColumns()
 
@@ -56,7 +57,7 @@ def makeAndShowGraph(model, screen, height, width):
     axis.plot(xColumn, yColumn, '.k')
     axis.set_ylabel(selectedColumns.columns[1])
     axis.set_xlabel(selectedColumns.columns[0])
-    plotLine(model.get_slope(), model.get_intercept())
+    aux.plotLine(model.get_slope(), model.get_intercept())
     equation = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
     axis.set_title(f'y= {equation} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     axis.grid()
@@ -86,10 +87,11 @@ def chooseFileNameSaveModel(object, modelDescription):
     Parameters
     ----------
     object: obj
-        El modelo que se va a guardar.
+        El modelo que se va a guardar
     modelDescription: str
-        Descripción del modelo que se va a guardar.
+        Descripción del modelo que se va a guardar
     """
+
     fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
     saveModelToPickleObject(object, modelDescription, fileName)
 
@@ -100,16 +102,15 @@ def saveModelToPickleObject(obj, modelDescription, name):
     Parameters
     ----------
     obj: obj
-        El objeto del modelo que se va a guardar.
+        El objeto del modelo que se va a guardar
     modelDescription: str
-         Descripción del modelo que se va a guardar.
+         Descripción del modelo que se va a guardar
     name: str
-        Nombre del archivo que se va a guardar.
-        """
+        Nombre del archivo que se va a guardar
+    """
 
     obj.set_description(modelDescription)
+
     # Serializar el objeto y guardarlo en el archivo
     with open(name, "wb") as f:
         dump(obj, f)
-
-

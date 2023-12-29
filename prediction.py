@@ -7,10 +7,10 @@ def showPrediction(model, frame):
 
     Parameters
     ----------
-    model: obj
-        Objeto de la clase Model utilizado para realizar la predicción.
+    model: classModel.Model
+        Objeto de la clase Model utilizado para realizar la predicción
     frame: Tkinter.Frame
-        Marco donde se mostrarán los elementos para realizar la predicción.
+        Marco donde se mostrarán los elementos para realizar la predicción
     """
 
     try:
@@ -43,26 +43,26 @@ def showPrediction(model, frame):
 
 
 def makePrediction(model, xInput, frame):
-        """Muestra el resultado de la predicción.
+    """Muestra el resultado de la predicción.
 
-        Parameters
-        ----------
-        model: obj
-            Objeto de la clase Model utilizado para realizar la predicción.
-        xInput: str
-            Valor de entrada para la predicción.
-        frame: Tkinter.Frame
-            Marco donde se mostrarán los elementos para realizar la predicción.
-        """
+    Parameters
+    ----------
+    model: classModel.Model
+        Objeto de la clase Model utilizado para realizar la predicción
+    xInput: str
+        Valor de entrada para la predicción
+    frame: Tkinter.Frame
+        Marco donde se mostrarán los elementos para realizar la predicción
+    """
 
-        # Convertir el valor ingresado por el usuario a un número
-        xInput = float(xInput)
+    # Convertir el valor ingresado por el usuario a un número
+    xInput = float(xInput)
 
-        yPredicted = model.predict(xInput)
+    yPredicted = model.predict(xInput)
 
-        # Mostrar la predicción en la interfaz
-        predictionsLabel3 = customtkinter.CTkLabel(frame, text = f"{round(yPredicted, 2)}")
-        predictionsLabel3.grid(row = 2, column = 4, columnspan = 5)
+    # Mostrar la predicción en la interfaz
+    predictionsLabel3 = customtkinter.CTkLabel(frame, text = f"{round(yPredicted, 2)}")
+    predictionsLabel3.grid(row = 2, column = 4, columnspan = 5)
 
 
 def createPredictionFrame(model, screen, height, width):
@@ -70,14 +70,14 @@ def createPredictionFrame(model, screen, height, width):
 
     Parameters
     ----------
-    model: obj
-        Objeto de la clase Model utilizado para realizar la predicción.
+    model: classModel.Model
+        Objeto de la clase Model utilizado para realizar la predicción
     screen: Tkinter.Tk
-        Ventana principal de la interfaz.
+        Ventana principal de la interfaz
     height: int
-        Altura de la pantalla.
+        Altura de la pantalla
     width: int
-        Ancho de la pantalla.
+        Ancho de la pantalla
     """
 
     predictionFrame = customtkinter.CTkFrame(screen, width = width*0.9, height = height*0.14)

@@ -8,12 +8,12 @@ def readSQL(dbName):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
 
     Returns
     -------
     DataFrame: pandas.DataFrame
-        DataFrame que contiene los datos extraídos de la base de datos.
+        DataFrame que contiene los datos extraídos de la base de datos
     """
 
     SQLConnection = sql.connect(dbName)
@@ -26,7 +26,7 @@ def createDB(dbName):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
     """
 
     SQLConnection = sql.connect(dbName)
@@ -40,12 +40,12 @@ def tableName(dbName):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
 
     Returns
     -------
     table: str
-    Nombre de la tabla de la base de datos.
+        Nombre de la tabla de la base de datos
     """
 
     SQLConnection = sql.connect(dbName)
@@ -65,7 +65,7 @@ def columnNames(dbName):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
     """
 
     table = tableName(dbName)
@@ -87,12 +87,12 @@ def readRows(dbName):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
 
     Returns
     -------
     data: list
-        Lista de tuplas que contienen los datos de las filas de la tabla.
+        Lista de tuplas que contienen los datos de las filas de la tabla
     """
 
     table = tableName(dbName)
@@ -114,14 +114,14 @@ def readOrdered(dbName, field):
     Parameters
     ----------
     dbName: str
-        Nombre del archivo de la base de datos SQLite.
+        Nombre del archivo de la base de datos SQLite
     field: str
-        Campo por el que se ordenan las filas.
+        Campo por el que se ordenan las filas
     
     Returns
     -------
     data: list
-        Lista de tuplas que contienen los datos de las filas de la tabla, ordenados por el campo especificado.
+        Lista de tuplas que contienen los datos de las filas de la tabla, ordenados por el campo especificado
     """
 
     SQLConnection = sql.connect(dbName)
