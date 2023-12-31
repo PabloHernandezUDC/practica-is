@@ -7,7 +7,8 @@ from abc import ABC, abstractmethod
 import classModel
 
 
-class RegressionTemplate(ABC): # clase que funciona como plantilla de regresiones lineales
+# clase que funciona como plantilla de regresiones lineales
+class RegressionTemplate(ABC):
 
     def plotLine(self, slope, intercept):
         """Genera una gráfica de línea a partir de la pendiente y el término independiente.
@@ -20,16 +21,14 @@ class RegressionTemplate(ABC): # clase que funciona como plantilla de regresione
             Término independiente de la línea
         """
 
-        axes = plt.gca() 
+        axes = plt.gca()
         xValues = np.array(axes.get_xlim())
         yValues = intercept + slope * xValues
-        plt.plot(xValues, yValues, '-r') # formato = '[marker][line][color]'
-    
+        plt.plot(xValues, yValues, '-r')  # formato = '[marker][line][color]'
 
     @abstractmethod
     def processData(self, selectedColumns):
         pass
-
 
     def regression(self, data, xVariable, yVariable, root):
         """Realiza una regresión lineal y devuelve un objeto de la clase Model.
@@ -52,33 +51,34 @@ class RegressionTemplate(ABC): # clase que funciona como plantilla de regresione
         """
         if data.empty:
             raise ValueError("El DataFrame está vacío.")
-        
-        plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
+
+        plt.clf()  # limpiamos la gráfica para no sobreescribir o pisar la anterior
 
         try:
             selectedColumns = data.iloc[:, [xVariable, yVariable]]
         except IndexError as e:
             raise IndexError(f"Índices de columna inválidos: {e}")
-        
+
         modelData = self.processData(selectedColumns)
-    
+
         xValues = modelData['xValues']
         yValues = modelData['yValues']
 
         model = LinearRegression().fit(xValues, yValues)
 
-        intercept = model.intercept_ # término independiente
-        slope = model.coef_[0] 
+        intercept = model.intercept_  # término independiente
+        slope = model.coef_[0]
         rSquared = round(model.score(xValues, yValues), 2)
         meanSquaredError = np.mean((model.predict(xValues) - yValues) ** 2)
         meanSquaredError = round(meanSquaredError, 2)
-    
-        return classModel.Model(intercept, slope, rSquared, meanSquaredError, 
-                                selectedColumns, xValues, modelData['xName'], 
+
+        return classModel.Model(intercept, slope, rSquared, meanSquaredError,
+                                selectedColumns, xValues, modelData['xName'],
                                 yValues, modelData['yName'], root.filename.name)
 
 
-class SimpleLinearRegression(RegressionTemplate): # subclase de RegressionTemplate() que se centra en las regresiones lineales simples
+# subclase de RegressionTemplate() que se centra en las regresiones lineales simples
+class SimpleLinearRegression(RegressionTemplate):
 
     def processData(self, selectedColumns):
         """Procesa las columnas seleccionadas.
@@ -87,14 +87,16 @@ class SimpleLinearRegression(RegressionTemplate): # subclase de RegressionTempla
         ----------
         selectedColumns: pandas.DataFrame
             DataFrame que contiene las columnas seleccionadas
-        
+
         Returns
         -------
         Diccionario con los nombres de las columnas seleccionadas y sus respectivos datos.
         """
 
-        xValues = np.array(selectedColumns.iloc[:, 0]).reshape((-1, 1)) # este es una columna con muchas filas
-        yValues = np.array(selectedColumns.iloc[:, 1])                  # este es una fila con muchas columnas
+        xValues = np.array(selectedColumns.iloc[:, 0]).reshape(
+            (-1, 1))  # este es una columna con muchas filas
+        # este es una fila con muchas columnas
+        yValues = np.array(selectedColumns.iloc[:, 1])
 
-        return {'xValues': xValues, 'yValues': yValues, 
+        return {'xValues': xValues, 'yValues': yValues,
                 'xName': selectedColumns.columns[0], 'yName': selectedColumns.columns[1]}

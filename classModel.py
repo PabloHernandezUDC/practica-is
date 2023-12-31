@@ -53,7 +53,7 @@ class Model():
     predict(inputValue) : Obtiene la predcción de y a partir de un valor de x.
     """
 
-    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columnxName, columny, columnyName, filepath, description = None):
+    def __init__(self, intercept, slope, rsquare, mse, selectedColumns, columnx, columnxName, columny, columnyName, filepath, description=None):
         self.intercept = intercept
         self.slope = slope
         self.rsquare = rsquare
@@ -64,51 +64,56 @@ class Model():
         self.columny = columny
         self.columnyName = columnyName
         self.filepath = filepath
-        self.description= description
-    
+        self.description = description
+
     def get_intercept(self):
         return self.intercept
-    
+
     def set_intercept(self, intercept):
         self.intercept = intercept
 
-        assert isinstance(intercept, (int, float)), "El término independiente debe ser un número."
+        assert isinstance(intercept, (int, float)
+                          ), "El término independiente debe ser un número."
 
     def get_slope(self):
         return self.slope
-    
+
     def set_slope(self, slope):
         self.slope = slope
 
-        assert isinstance(slope, (int, float)), "La pendiente debe ser un número."
+        assert isinstance(slope, (int, float)
+                          ), "La pendiente debe ser un número."
 
     def get_rsquare(self):
         return self.rsquare
-    
+
     def set_rsquare(self, rsquare):
         self.rsquare = rsquare
 
-        assert isinstance(rsquare, (int, float)), "El coeficiente de determinación debe ser un número."
-    
+        assert isinstance(
+            rsquare, (int, float)), "El coeficiente de determinación debe ser un número."
+
     def get_mse(self):
         return self.mse
-    
+
     def set_mse(self, mse):
         self.mse = mse
 
-        assert isinstance(mse, (int, float)), "El error cuadrado medio debe ser un número."
-    
+        assert isinstance(
+            mse, (int, float)), "El error cuadrado medio debe ser un número."
+
     def get_selectedColumns(self):
         return self.selectedColumns
-    
+
     def set_selectedColumns(self, selectedColumns):
         self.selectedColumns = selectedColumns
 
-        assert isinstance(selectedColumns, list), "Las columnas seleccionadas deben ser una lista."
+        assert isinstance(
+            selectedColumns, list), "Las columnas seleccionadas deben ser una lista."
 
     def get_columnx(self):
         return self.columnx
-    
+
     def set_columnx(self, columnx):
         self.columnx = columnx
 
@@ -116,12 +121,12 @@ class Model():
 
     def get_columnxName(self):
         return self.columnxName
-    
+
     def set_columnxName(self, columnxName):
         self.columnxName = columnxName
 
     def get_columny(self):
-        return self.columny 
+        return self.columny
 
     def set_columny(self, columny):
         self.columny = columny
@@ -130,25 +135,26 @@ class Model():
 
     def get_columnyName(self):
         return self.columnyName
-    
+
     def set_columnyName(self, columnyName):
         self.columnyName = columnyName
 
     def get_filepath(self):
         return self.filepath
-    
+
     def set_filepath(self, filepath):
         self.filepath = filepath
 
     def get_description(self):
         return self.description
-    
+
     def set_description(self, description):
         self.description = description
 
         if description is not None:
-            assert isinstance(description, str), "La descripción debe ser una cadena de texto."
-    
+            assert isinstance(
+                description, str), "La descripción debe ser una cadena de texto."
+
     def predict(self, inputValue):
         prediction = self.intercept + self.slope * inputValue
         return prediction

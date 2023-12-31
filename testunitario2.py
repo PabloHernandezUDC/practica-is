@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 from regression import SimpleLinearRegression
 from classModel import Model
 
+
 class TestSimpleLinearRegression(unittest.TestCase):
 
     def setUp(self):
@@ -21,7 +22,8 @@ class TestSimpleLinearRegression(unittest.TestCase):
         mock_root = MagicMock()
 
         # Ejecutamos la función de regresión
-        result = self.regression_instance.regression(data, x_var, y_var, mock_root)
+        result = self.regression_instance.regression(
+            data, x_var, y_var, mock_root)
 
         # Comprobamos que la regresión devuelve un objeto de tipo Model
         self.assertIsInstance(result, Model)
@@ -55,6 +57,7 @@ class TestSimpleLinearRegression(unittest.TestCase):
         # Verificamos que se levante un IndexError
         with self.assertRaises(IndexError):
             self.regression_instance.regression(data, x_var, y_var, mock_root)
+
 
 if __name__ == '__main__':
     unittest.main()

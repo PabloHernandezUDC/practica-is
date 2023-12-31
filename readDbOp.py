@@ -49,7 +49,7 @@ def tableName(dbName):
     """
 
     SQLConnection = sql.connect(dbName)
-    
+
     cursor = SQLConnection.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     table = cursor.fetchone()[0]
@@ -70,7 +70,7 @@ def columnNames(dbName):
 
     table = tableName(dbName)
     SQLConnection = sql.connect(dbName)
-    
+
     cursor = SQLConnection.cursor()
     cursor.execute(f"PRAGMA table_info({table});")
     columns = cursor.fetchall()
@@ -97,14 +97,14 @@ def readRows(dbName):
 
     table = tableName(dbName)
     SQLConnection = sql.connect(dbName)
-    
+
     cursor = SQLConnection.cursor()
     cursor.execute("SELECT * FROM {}".format(table))
-    data = cursor.fetchall() # crea una lista de tuplas con la info de la tabla
-    
+    data = cursor.fetchall()  # crea una lista de tuplas con la info de la tabla
+
     SQLConnection.commit()
     SQLConnection.close()
-    
+
     return data
 
 
@@ -117,7 +117,7 @@ def readOrdered(dbName, field):
         Nombre del archivo de la base de datos SQLite
     field: str
         Campo por el que se ordenan las filas
-    
+
     Returns
     -------
     data: list
@@ -130,16 +130,17 @@ def readOrdered(dbName, field):
     table = tableName(dbName)
 
     cursor.execute("SELECT * FROM {} ORDER BY {}".format(table, field))
-    
-    data = cursor.fetchall() # crea una lista de tuplas con la info de la tabla
-    
+
+    data = cursor.fetchall()  # crea una lista de tuplas con la info de la tabla
+
     SQLConnection.commit()
     SQLConnection.close()
-    
+
     return data
 
 
 if __name__ == '__main__':
     name = "modelos/housing.db"
-    columns = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'population', 'households', 'median_income', 'median_house_value', 'ocean_proximity']
+    columns = ['longitude', 'latitude', 'housing_median_age', 'total_rooms', 'total_bedrooms',
+               'population', 'households', 'median_income', 'median_house_value', 'ocean_proximity']
     table = 'california_housing_dataset'

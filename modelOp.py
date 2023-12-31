@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from tkinter import *
 from tkinter import filedialog
-from customtkinter import CTkButton, CTkFrame, CTkLabel,CTkEntry
+from customtkinter import CTkButton, CTkFrame, CTkLabel, CTkEntry
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pickle import dump
 
@@ -31,7 +31,8 @@ def makeModel(data, root, screen, height, width, v1, v2):
         Variable asociada a la variable y seleccionada
     """
     aux = SimpleLinearRegression()
-    makeAndShowGraph(aux.regression(data, int(v1.get()), int(v2.get()), root), screen, height, width)
+    makeAndShowGraph(aux.regression(data, int(v1.get()),
+                     int(v2.get()), root), screen, height, width)
 
 
 def makeAndShowGraph(model, screen, height, width):
@@ -58,25 +59,29 @@ def makeAndShowGraph(model, screen, height, width):
     axis.set_ylabel(selectedColumns.columns[1])
     axis.set_xlabel(selectedColumns.columns[0])
     aux.plotLine(model.get_slope(), model.get_intercept())
-    equation = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept() > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
-    axis.set_title(f'y= {equation} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
+    equation = f'{round(model.get_slope(), 2)}x ' + ('+' if model.get_intercept()
+                                                     > 0 else '-') + f' {round(abs(model.get_intercept()), 2)}'
+    axis.set_title(
+        f'y= {equation} / R²: {model.get_rsquare()} / MSE: {model.get_mse()}')
     axis.grid()
 
-    graphFrame = CTkFrame(screen, width = width*0.9, height = height*0.14)
-    graphFrame.grid(row = 6, columnspan = 12)
+    graphFrame = CTkFrame(screen, width=width*0.9, height=height*0.14)
+    graphFrame.grid(row=6, columnspan=12)
 
     graphCanvas = FigureCanvasTkAgg(figure, graphFrame)
     graphCanvas.draw()
-    graphCanvas.get_tk_widget().grid(row = 0, column = 0, rowspan = 9)
+    graphCanvas.get_tk_widget().grid(row=0, column=0, rowspan=9)
 
-    plt.savefig('fig.png') # para guardarlo en un archivo
+    plt.savefig('fig.png')  # para guardarlo en un archivo
 
-    graphFrame.grid_columnconfigure(1, minsize = width*0.10)
-    text = CTkLabel(graphFrame,text = "Añade una descripción:").grid(row=3,column=2, sticky = S)
+    graphFrame.grid_columnconfigure(1, minsize=width*0.10)
+    text = CTkLabel(graphFrame, text="Añade una descripción:").grid(
+        row=3, column=2, sticky=S)
     modelDescription = CTkEntry(graphFrame)
-    modelDescription.grid(row=4,column=2, sticky = N)
-    
-    CTkButton(graphFrame, text = "Guardar modelo", command = lambda: chooseFileNameSaveModel(model,modelDescription.get())).grid(row = 5, column = 2, sticky = N)
+    modelDescription.grid(row=4, column=2, sticky=N)
+
+    CTkButton(graphFrame, text="Guardar modelo", command=lambda: chooseFileNameSaveModel(
+        model, modelDescription.get())).grid(row=5, column=2, sticky=N)
 
     createPredictionFrame(model, screen, height, width)
 
@@ -93,11 +98,13 @@ def chooseFileNameSaveModel(object, modelDescription):
     """
     while True:
         try:
-            fileName = filedialog.asksaveasfilename(defaultextension = ".pickle", filetypes = [("Pickle files", "*.pickle")])
+            fileName = filedialog.asksaveasfilename(defaultextension=".pickle", filetypes=[
+                                                    ("Pickle files", "*.pickle")])
             saveModelToPickleObject(object, modelDescription, fileName)
             break
         except FileNotFoundError:
             print('Por favor, introduce un nombre para el archivo archivo.')
+
 
 def saveModelToPickleObject(object, modelDescription, name):
     """Guarda el modelo serializado en un archivo.

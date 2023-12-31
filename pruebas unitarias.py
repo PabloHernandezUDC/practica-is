@@ -26,5 +26,6 @@ class TestMakePrediction(unittest.TestCase):
         frame.grid.assert_any_call(row=2, column=2, columnspan=2)
         frame.grid.assert_any_call(row=2, column=4, columnspan=5)
 
+
 if __name__ == '__main__':
     unittest.main()
