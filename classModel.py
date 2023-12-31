@@ -72,23 +72,31 @@ class Model():
     def set_intercept(self, intercept):
         self.intercept = intercept
 
+        assert isinstance(intercept, (int, float)), "El término independiente debe ser un número."
+
     def get_slope(self):
         return self.slope
     
     def set_slope(self, slope):
         self.slope = slope
 
+        assert isinstance(slope, (int, float)), "La pendiente debe ser un número."
+
     def get_rsquare(self):
         return self.rsquare
     
     def set_rsquare(self, rsquare):
         self.rsquare = rsquare
+
+        assert isinstance(rsquare, (int, float)), "El coeficiente de determinación debe ser un número."
     
     def get_mse(self):
         return self.mse
     
     def set_mse(self, mse):
         self.mse = mse
+
+        assert isinstance(mse, (int, float)), "El error cuadrado medio debe ser un número."
     
     def get_selectedColumns(self):
         return self.selectedColumns
@@ -96,11 +104,15 @@ class Model():
     def set_selectedColumns(self, selectedColumns):
         self.selectedColumns = selectedColumns
 
+        assert isinstance(selectedColumns, list), "Las columnas seleccionadas deben ser una lista."
+
     def get_columnx(self):
         return self.columnx
     
     def set_columnx(self, columnx):
         self.columnx = columnx
+
+        assert isinstance(columnx, list), "La columna x debe ser una lista."
 
     def get_columnxName(self):
         return self.columnxName
@@ -113,6 +125,8 @@ class Model():
 
     def set_columny(self, columny):
         self.columny = columny
+
+        assert isinstance(columny, list), "La columna y debe ser una lista."
 
     def get_columnyName(self):
         return self.columnyName
@@ -131,6 +145,9 @@ class Model():
     
     def set_description(self, description):
         self.description = description
+
+        if description is not None:
+            assert isinstance(description, str), "La descripción debe ser una cadena de texto."
     
     def predict(self, inputValue):
         prediction = self.intercept + self.slope * inputValue
