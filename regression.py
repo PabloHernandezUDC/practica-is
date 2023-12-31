@@ -50,7 +50,9 @@ class RegressionTemplate(ABC): # clase que funciona como plantilla de regresione
         Model: classModel.Model
             Objeto de la clase Model con los resultados de la regresión
         """
-
+        if data.empty:
+            raise ValueError("El DataFrame está vacío.")
+        
         plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
         selectedColumns = data.iloc[:, [xVariable, yVariable]]
 
