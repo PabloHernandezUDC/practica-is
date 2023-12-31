@@ -54,8 +54,12 @@ class RegressionTemplate(ABC): # clase que funciona como plantilla de regresione
             raise ValueError("El DataFrame está vacío.")
         
         plt.clf() # limpiamos la gráfica para no sobreescribir o pisar la anterior
-        selectedColumns = data.iloc[:, [xVariable, yVariable]]
 
+        try:
+            selectedColumns = data.iloc[:, [xVariable, yVariable]]
+        except IndexError as e:
+            raise IndexError(f"Índices de columna inválidos: {e}")
+        
         modelData = self.processData(selectedColumns)
     
         xValues = modelData['xValues']
